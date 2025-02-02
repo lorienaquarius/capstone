@@ -51,6 +51,7 @@ int main(int argc, char *argv[]) {
     int encoderCount = 0;
 
     int targetEncoderCount = stoi(arg) * STEPS_PER_REVOLUTION / 360;
+    cout <<"Target encoder count: " << targetEncoderCount << endl;
 
     phaseA = gpioRead(MOTOR_ONE_ENCODER_A_PIN);
     phaseB = gpioRead(MOTOR_ONE_ENCODER_B_PIN);
@@ -71,6 +72,7 @@ int main(int argc, char *argv[]) {
         phaseZ = gpioRead(MOTOR_ONE_ENCODER_Z_PIN);
         currentAB = (phaseA << 1) + phaseB;
         encoderCount += ENCODER_INCREMENTS[(previousAB << 2) | currentAB];
+        previousAB = currentAB;
         cout << "Current encoder count: " << encoderCount << endl;
 
     }
