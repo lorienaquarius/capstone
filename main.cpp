@@ -71,6 +71,7 @@ int main(int argc, char *argv[]) {
         phaseZ = gpioRead(MOTOR_ONE_ENCODER_Z_PIN);
         currentAB = (phaseA << 1) + phaseB;
         encoderCount += ENCODER_INCREMENTS[(previousAB << 2) | currentAB];
+        cout << "Current encoder count: " << encoderCount << endl;
 
     }
     gpioWrite(MOTOR_ONE_ENABLE_PIN, 0);
