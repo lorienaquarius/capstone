@@ -72,4 +72,6 @@ int main(int argc, char *argv[]) {
         encoderCount += ENCODER_INCREMENTS[(previousAB << 2) | currentAB];
 
     }
+    gpioWrite(MOTOR_ONE_ENABLE_PIN, 0);
+    gpioWrite(MOTOR_ONE_DIRECTION_PIN, 0);
 }
