@@ -61,10 +61,10 @@ int main(int argc, char *argv[]) {
     gpioWrite(MOTOR_ONE_ENABLE_PIN, 1);
     gpioWrite(MOTOR_ONE_DIRECTION_PIN, 0);
     gpioWrite(MOTOR_ONE_PULSE_PIN, 1);
-
+    int i;
     while (encoderCount < targetEncoderCount) {
-
-        gpioTrigger(MOTOR_ONE_PULSE_PIN, 1, 0);
+        i++;
+        // gpioTrigger(MOTOR_ONE_PULSE_PIN, 1, 0);
         usleep(6);
 
         phaseA = gpioRead(MOTOR_ONE_ENCODER_A_PIN);
@@ -74,6 +74,7 @@ int main(int argc, char *argv[]) {
         encoderCount += ENCODER_INCREMENTS[(previousAB << 2) | currentAB];
         previousAB = currentAB;
         cout << "Current encoder count: " << encoderCount << endl;
+        if(i > 1000) break;
 
     }
     gpioWrite(MOTOR_ONE_ENABLE_PIN, 0);
