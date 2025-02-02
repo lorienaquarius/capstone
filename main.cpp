@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
     string arg = argv[1];
-    const int ENCODER_INCREMENTS[16] = {0, -1, 1, 0, 1, 0, 0, -1, -1, 0, 0, 1, 0, 1, -1, 0};
+    const int ENCODER_INCREMENTS[16] = {0, -1, 1, 0, -1, 0, 0, 1, 1, 0, 0, -1, 0, -1, 1, 0};
     int currentAB = 0;
     int previousAB = 0;
     int phaseA;
