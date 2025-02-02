@@ -59,11 +59,12 @@ int main(int argc, char *argv[]) {
 
     gpioWrite(MOTOR_ONE_ENABLE_PIN, 1);
     gpioWrite(MOTOR_ONE_DIRECTION_PIN, 0);
+    gpioWrite(MOTOR_ONE_PULSE_PIN, 1);
 
     while (encoderCount < targetEncoderCount) {
 
-        gpioTrigger(MOTOR_ONE_PULSE_PIN, 1, 1);
-        sleep(0.000005);
+        gpioTrigger(MOTOR_ONE_PULSE_PIN, 1, 0);
+        usleep(6);
 
         phaseA = gpioRead(MOTOR_ONE_ENCODER_A_PIN);
         phaseB = gpioRead(MOTOR_ONE_ENCODER_B_PIN);
