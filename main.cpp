@@ -61,13 +61,12 @@ int main(int argc, char *argv[]) {
     gpioWrite(MOTOR_ONE_ENABLE_PIN, 1);
     gpioWrite(MOTOR_ONE_DIRECTION_PIN, 0);
     gpioWrite(MOTOR_ONE_PULSE_PIN, 1);
-    int i;
     while (stepCount < targetStepCount) {
-        i++;
         gpioTrigger(MOTOR_ONE_PULSE_PIN, 8, 0);
         usleep(100);
 
         stepCount++;
+        cout << "Current step count: " << stepCount << endl;
 
         // phaseA = gpioRead(MOTOR_ONE_ENCODER_A_PIN);
         // phaseB = gpioRead(MOTOR_ONE_ENCODER_B_PIN);
