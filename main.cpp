@@ -48,33 +48,34 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
 
-    int encoderCount = 0;
+    int stepCount = 0;
 
-    int targetEncoderCount = stoi(arg) * STEPS_PER_REVOLUTION / 360;
-    cout <<"Target encoder count: " << targetEncoderCount << endl;
+    int targetStepCount = stoi(arg) * STEPS_PER_REVOLUTION / 360;
+    cout <<"Target encoder count: " << targetStepCount << endl;
 
-    phaseA = gpioRead(MOTOR_ONE_ENCODER_A_PIN);
-    phaseB = gpioRead(MOTOR_ONE_ENCODER_B_PIN);
-    phaseZ = gpioRead(MOTOR_ONE_ENCODER_Z_PIN);
-    previousAB = (phaseA << 1) | phaseB;
+    // phaseA = gpioRead(MOTOR_ONE_ENCODER_A_PIN);
+    // phaseB = gpioRead(MOTOR_ONE_ENCODER_B_PIN);
+    // phaseZ = gpioRead(MOTOR_ONE_ENCODER_Z_PIN);
+    // previousAB = (phaseA << 1) | phaseB;
 
     gpioWrite(MOTOR_ONE_ENABLE_PIN, 1);
     gpioWrite(MOTOR_ONE_DIRECTION_PIN, 0);
     gpioWrite(MOTOR_ONE_PULSE_PIN, 1);
     int i;
-    while (encoderCount < targetEncoderCount) {
+    while (stepCount < targetStepCount) {
         i++;
-        // gpioTrigger(MOTOR_ONE_PULSE_PIN, 1, 0);
+        gpioTrigger(MOTOR_ONE_PULSE_PIN, 1, 0);
         usleep(6);
+        stepCount++;
 
-        phaseA = gpioRead(MOTOR_ONE_ENCODER_A_PIN);
-        phaseB = gpioRead(MOTOR_ONE_ENCODER_B_PIN);
-        phaseZ = gpioRead(MOTOR_ONE_ENCODER_Z_PIN);
-        currentAB = (phaseA << 1) + phaseB;
-        encoderCount += ENCODER_INCREMENTS[(previousAB << 2) | currentAB];
-        previousAB = currentAB;
-        cout << "Current encoder count: " << encoderCount << endl;
-        if(i > 1000) break;
+        // phaseA = gpioRead(MOTOR_ONE_ENCODER_A_PIN);
+        // phaseB = gpioRead(MOTOR_ONE_ENCODER_B_PIN);
+        // phaseZ = gpioRead(MOTOR_ONE_ENCODER_Z_PIN);
+        // currentAB = (phaseA << 1) + phaseB;
+        // encoderCount += ENCODER_INCREMENTS[(previousAB << 2) | currentAB];
+        // previousAB = currentAB;
+        // cout << "Current encoder count: " << encoderCount << endl;
+        // if(i > 1000) break;
 
     }
     gpioWrite(MOTOR_ONE_ENABLE_PIN, 0);
