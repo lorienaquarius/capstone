@@ -65,7 +65,7 @@ int main(int argc, char *argv[]) {
     gpioWrite(MOTOR_ONE_PULSE_PIN, 1);
     while (!gpioRead(MOTOR_ONE_ENCODER_Z_PIN)) {
         gpioTrigger(MOTOR_ONE_PULSE_PIN, 8, 0);
-        usleep(500);
+        usleep(5000);
 
         stepCount++;
         cout << "Current step count: " << stepCount << endl;
