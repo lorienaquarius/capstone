@@ -64,7 +64,7 @@ int main(int argc, char *argv[]) {
     int i;
     while (!gpioRead(MOTOR_ONE_ENCODER_Z_PIN)) {
         i++;
-        gpioTrigger(MOTOR_ONE_PULSE_PIN, 1, 0);
+        gpioTrigger(MOTOR_ONE_PULSE_PIN, 8, 0);
         usleep(100);
 
         stepCount++;
