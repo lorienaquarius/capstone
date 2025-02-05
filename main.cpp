@@ -50,7 +50,7 @@ int main(int argc, char *argv[]) {
 
     int stepCount = 0;
 
-    double targetStepCount = stof(arg) * (400.0/360.0) * 19.2223;
+    double targetStepCount = stof(arg) * (400.0/360.0) * (19.0 + 35.0/157.0);
     cout <<"Target encoder count: " << targetStepCount << endl;
 
     // phaseA = gpioRead(MOTOR_ONE_ENCODER_A_PIN);
