@@ -70,6 +70,7 @@ int main(int argc, char *argv[]) {
         stepCount++;
         if(gpioRead(MOTOR_ONE_ENCODER_Z_PIN)) {
             cout << "Index triggered at step count: " << stepCount << endl;
+            cout << "Position of encoders at index position: A: " << gpioRead(MOTOR_ONE_ENCODER_A_PIN) << " B: " << gpioRead(MOTOR_ONE_ENCODER_B_PIN) << endl;
         }
 
     }
