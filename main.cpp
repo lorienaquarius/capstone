@@ -50,7 +50,7 @@ int main(int argc, char *argv[]) {
 
     int stepCount = 0;
 
-    double targetStepCount = stof(arg) * (STEPS_PER_REVOLUTION / 360.0) * 2.0;
+    double targetStepCount = stof(arg) * (400.0/360.0) * 19.2223;
     cout <<"Target encoder count: " << targetStepCount << endl;
 
     // phaseA = gpioRead(MOTOR_ONE_ENCODER_A_PIN);
@@ -68,7 +68,6 @@ int main(int argc, char *argv[]) {
         usleep(1000);
 
         stepCount++;
-        cout << "Current step count: " << stepCount << endl;
 
         // phaseA = gpioRead(MOTOR_ONE_ENCODER_A_PIN);
         // phaseB = gpioRead(MOTOR_ONE_ENCODER_B_PIN);
@@ -80,6 +79,7 @@ int main(int argc, char *argv[]) {
         // if(i > 1000) break;
 
     }
+    cout << "Current step count: " << stepCount << endl;
     gpioWrite(MOTOR_ONE_ENABLE_PIN, 0);
     gpioWrite(MOTOR_ONE_DIRECTION_PIN, 0);
 }
