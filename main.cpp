@@ -65,10 +65,8 @@ int main(int argc, char *argv[]) {
     while (stepCount < targetStepCount) {
         i++;
         gpioTrigger(MOTOR_ONE_PULSE_PIN, 1, 0);
-        usleep(100);
-        while(!gpioRead(MOTOR_ONE_ENCODER_A_PIN)) {
-            usleep(1000);
-        };
+        usleep(1000);
+
         stepCount++;
 
         // phaseA = gpioRead(MOTOR_ONE_ENCODER_A_PIN);
