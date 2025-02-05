@@ -50,7 +50,7 @@ int main(int argc, char *argv[]) {
 
     int stepCount = 0;
 
-    double targetStepCount = stof(arg) * (400.0/360.0) * (19.0 + 35.0/157.0);
+    double targetStepCount = stof(arg) * (400.0/360.0) * (19.0 + 35.0/157.0) ;
     cout <<"Target encoder count: " << targetStepCount << endl;
 
     // phaseA = gpioRead(MOTOR_ONE_ENCODER_A_PIN);
@@ -68,15 +68,9 @@ int main(int argc, char *argv[]) {
         usleep(1000);
 
         stepCount++;
-
-        // phaseA = gpioRead(MOTOR_ONE_ENCODER_A_PIN);
-        // phaseB = gpioRead(MOTOR_ONE_ENCODER_B_PIN);
-        // phaseZ = gpioRead(MOTOR_ONE_ENCODER_Z_PIN);
-        // currentAB = (phaseA << 1) + phaseB;
-        // encoderCount += ENCODER_INCREMENTS[(previousAB << 2) | currentAB];
-        // previousAB = currentAB;
-        // cout << "Current encoder count: " << encoderCount << endl;
-        // if(i > 1000) break;
+        if(gpioRead(MOTOR_ONE_ENCODER_Z_PIN)) {
+            cout << "Index triggered at step count: " << stepCount << endl;
+        }
 
     }
     cout << "Current step count: " << stepCount << endl;
