@@ -13,7 +13,8 @@ void printMenu() {
     cout << "Main menu" << endl;
     cout << "\ttr: Turn X degrees relative to the current position" << endl;
     cout << "\tta: Turn X degrees relative to the calibrated 0 position" << endl;
-    cout << "\tm: print menu again" << endl;
+    cout << "\tm: Print menu again" << endl;
+    cout << "\tr: Reset motor" << endl;
     cout << "\tq: Quit" << endl;
 }
 
@@ -52,7 +53,6 @@ int main(int argc, char *argv[]) {
     motor0->calibrate();
 
     string input;
-    printMenu();
     do {
         printMenu();
         cin >> input;
