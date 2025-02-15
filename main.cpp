@@ -12,7 +12,7 @@ using namespace std;
 void printMenu() {
     cout << "Main menu" << endl;
     cout << "\ttr: Turn X degrees relative to the current position" << endl;
-    cout << "\tta: Turn X degrees relative to the calibrated 0 position";
+    cout << "\tta: Turn X degrees relative to the calibrated 0 position" << endl;
     cout << "\tm: print menu again" << endl;
     cout << "\tq: Quit" << endl;
 }
