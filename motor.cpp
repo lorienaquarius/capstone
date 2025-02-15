@@ -100,4 +100,5 @@ inline void motor::turn(double targetCount) {
             count--;
         }
     }
+    cout << "Turn complete!" << endl;
 }

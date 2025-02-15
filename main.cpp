@@ -52,7 +52,7 @@ int main(int argc, char *argv[]) {
     string input;
     printMenu();
     do {
-
+        printMenu();
         cin >> input;
         switch(hasher(input)) {
             case tr:
