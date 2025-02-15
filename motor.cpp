@@ -81,15 +81,18 @@ inline void motor::turn(double targetCount) {
         gpioWrite(MOTOR_DIRECTION_PIN[motorNum], direction);
     }
 
-    // Turn Forward
-    if(direction) {
+    cout << "Motor turning " << (direction ? "counterclockwise" : "clockwise") << endl;
+    cout << "Current count: " << count << "\nTarget count: " << targetCount << endl;
+
+    // Turn clockwise
+    if(!direction) {
         while(count < (targetCount)) {
             gpioTrigger(MOTOR_PULSE_PIN[motorNum], 8, 0);
             usleep(5);
             count++;
         }
     }
-    // Turn Backwards
+    // Turn counterclockwise
     else {
         while(count > (targetCount)) {
             gpioTrigger(MOTOR_PULSE_PIN[motorNum], 8, 0);
