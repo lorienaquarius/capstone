@@ -21,6 +21,7 @@ enum stringCodes {
     tr,
     ta,
     m,
+    r,
     q,
     d
 };
@@ -30,6 +31,7 @@ stringCodes hasher(string in) {
     else if (in == "ta") return ta;
     else if (in == "m") return m;
     else if (in == "q") return q;
+    else if (in == "r") return r;
     else return d;
 }
 
@@ -67,6 +69,10 @@ int main(int argc, char *argv[]) {
                 break;
             case m:
                 printMenu();
+                break;
+            case r:
+                cout << "Attempting reset" << endl;
+                motor0->reset();
                 break;
             case q:
                 break;
