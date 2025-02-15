@@ -50,7 +50,7 @@ void motor::calibrate() {
         }
         cout << "Would you like to set the current position as the zero position? [y/n]" << endl;
         cin >> decision;
-    } while(decision != "y" || decision != "Y");
+    } while(decision != "y" && decision != "Y");
     count = 0;
     cout << "Motor calibrated!" << endl;
 
