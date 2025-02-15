@@ -17,6 +17,7 @@ public:
     void turnRelative(double degrees);
     void turnAbsolute(double degrees);
     void calibrate();
+    void reset();
 private:
     inline void turn(double targetCount);
     int count = 0;

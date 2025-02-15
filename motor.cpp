@@ -71,7 +71,59 @@ void motor::turnAbsolute(double degrees) {
     turn(targetStepCount);
 }
 
+void motor::reset() {
+    turn(0);
+    usleep(5000);
 
+    // Went back to count 0, but the index encoder is still low
+    if(gpioRead(MOTOR_ENCODER_Z_PIN[motorNum]) == 0) {
+        bool found = false;
+        cout << "Slight motor drift detected, going to closest reset point" << endl;
+
+        // Reset position was undershot, should be somewhere close. Try moving half a revolution, see if we can find it
+        for(int i = 0; i < (STEPS_PER_REVOLUTION/2); i++) {
+            gpioTrigger(MOTOR_PULSE_PIN[motorNum], 8, 0);
+            usleep(5000);
+            if(gpioRead(MOTOR_ENCODER_Z_PIN[motorNum]) == 1) {
+                cout << "Reset position found" << endl;
+                found = true;
+                break;
+            }
+        }
+        // We overshot the reset position to begin with, try resetting the other way
+        if(!found) {
+
+            cout << "Looked the wrong way, trying to reset again" << endl;
+            direction = !direction;
+            gpioWrite(MOTOR_DIRECTION_PIN[motorNum], direction);
+
+            // Go back to our initial reset position quickly
+            for(int i = 0; i < (STEPS_PER_REVOLUTION/2); i++) {
+                gpioTrigger(MOTOR_PULSE_PIN[motorNum], 8, 0);
+                usleep(5);
+            }
+            usleep(5000);
+            // Now slowly rotate to try to find the reset position
+            for(int i = 0; i < (STEPS_PER_REVOLUTION/2); i++) {
+                gpioTrigger(MOTOR_PULSE_PIN[motorNum], 8, 0);
+                usleep(5000);
+                if(gpioRead(MOTOR_ENCODER_Z_PIN[motorNum]) == 1) {
+                    found = true;
+                    break;
+                }
+            }
+
+            // We tried half a reset position in each direction and still didn't find it, you're just fucked
+            if(!found) {
+                cout << "Reset failed, please recalibrate motor" << endl;
+            }
+        }
+
+    }
+
+
+
+}
 /// Helper function to turn the motor to a generic encoder count
 /// @param targetCount the target step count
 inline void motor::turn(double targetCount) {
