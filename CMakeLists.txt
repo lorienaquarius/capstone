@@ -41,5 +41,7 @@ find_package_handle_standard_args(pigpio
 link_libraries(-lpigpio -lrt)
 
 add_executable(capstone
+    motor.cpp
+    motor.h
     main.cpp
-    README.md)
+        )

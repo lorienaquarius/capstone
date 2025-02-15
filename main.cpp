@@ -2,79 +2,80 @@
 #include <stdlib.h>
 #include <iostream>
 #include <unistd.h>
+#include "motor.h"
 
-#define MOTOR_ONE_DIRECTION_PIN 8
-#define MOTOR_ONE_ENABLE_PIN 7
-#define MOTOR_ONE_PULSE_PIN 12
-#define MOTOR_ONE_ENCODER_A_PIN 26
-#define MOTOR_ONE_ENCODER_B_PIN 19
-#define MOTOR_ONE_ENCODER_Z_PIN 13
 
-#define STEPS_PER_REVOLUTION 3844.585987
 #define MICROSTEPS = 2
 
 using namespace std;
 
+void printMenu() {
+    cout << "Main menu" << endl;
+    cout << "\ttr: Turn X degrees relative to the current position" << endl;
+    cout << "\tta: Turn X degrees relative to the calibrated 0 position";
+    cout << "\tm: print menu again" << endl;
+    cout << "\tq: Quit" << endl;
+}
+
+enum stringCodes {
+    tr,
+    ta,
+    m,
+    q,
+    d
+};
+
+stringCodes hasher(string in) {
+    if(in == "tr") return tr;
+    else if (in == "ta") return ta;
+    else if (in == "m") return m;
+    else if (in == "q") return q;
+    else return d;
+}
+
 int main(int argc, char *argv[]) {
-    if(argc < 2) {
-        cout << "Incorrect usage. Please enter degrees to turn to" << endl;
-        exit(1);
-    }
-    string arg = argv[1];
-    const int ENCODER_INCREMENTS[16] = {0, -1, 1, 0, -1, 0, 0, 1, 1, 0, 0, -1, 0, -1, 1, 0};
-    int currentAB = 0;
-    int previousAB = 0;
-    int phaseA;
-    int phaseB;
-    int phaseZ;
 
     if(gpioInitialise() < 0) {
         cout << "Failed to initialize GPIO" << endl;
         exit(1);
     }
 
-    int result = 0;
+    cout << "Welcome to the stepper motor turning application, let's start by calibrating a motor!" << endl;
+    sleep(1);
+    cout << "The motor will start by turning clockwise to the nearest index position" << endl;
+    sleep(1);
 
-    result |= gpioSetMode(MOTOR_ONE_DIRECTION_PIN, PI_OUTPUT);
-    result |= gpioSetMode(MOTOR_ONE_ENABLE_PIN, PI_OUTPUT);
-    result |= gpioSetMode(MOTOR_ONE_PULSE_PIN, PI_OUTPUT);
+    string degrees;
+    auto* motor0 = new motor(0);
+    motor0->calibrate();
 
-    result |= gpioSetMode(MOTOR_ONE_ENCODER_A_PIN, PI_INPUT);
-    result |= gpioSetMode(MOTOR_ONE_ENCODER_B_PIN, PI_INPUT);
-    result |= gpioSetMode(MOTOR_ONE_ENCODER_Z_PIN, PI_INPUT);
+    string input;
+    printMenu();
+    do {
 
-    if (result > 0) {
-        cout << "Failed to set GPIO Modes" << endl;
-        exit(1);
-    }
-
-    int stepCount = 0;
-
-    double targetStepCount = stof(arg) * (400.0/360.0) * (19.0 + 35.0/157.0) ;
-    cout <<"Target encoder count: " << targetStepCount << endl;
-
-    // phaseA = gpioRead(MOTOR_ONE_ENCODER_A_PIN);
-    // phaseB = gpioRead(MOTOR_ONE_ENCODER_B_PIN);
-    // phaseZ = gpioRead(MOTOR_ONE_ENCODER_Z_PIN);
-    // previousAB = (phaseA << 1) | phaseB;
-
-    gpioWrite(MOTOR_ONE_ENABLE_PIN, 1);
-    usleep(500);
-    gpioWrite(MOTOR_ONE_DIRECTION_PIN, 0);
-    usleep(5);
-    gpioWrite(MOTOR_ONE_PULSE_PIN, 1);
-    while (stepCount < targetStepCount) {
-        gpioTrigger(MOTOR_ONE_PULSE_PIN, 8, 0);
-        usleep(4000);
-
-        stepCount++;
-        if(gpioRead(MOTOR_ONE_ENCODER_Z_PIN)) {
-            cout << "Index triggered at step count: " << stepCount << endl;
-            cout << "Position of encoders at index position: A: " << gpioRead(MOTOR_ONE_ENCODER_A_PIN) << " B: " << gpioRead(MOTOR_ONE_ENCODER_B_PIN) << endl;
+        cin >> input;
+        switch(hasher(input)) {
+            case tr:
+                cout << "Please enter number of degrees" << endl;
+                cin >> degrees;
+                motor0->turnRelative(stod(degrees));
+                break;
+            case ta:
+                cout << "Please enter number of degrees" << endl;
+                cin >> degrees;
+                motor0->turnAbsolute(stod(degrees));
+                break;
+            case m:
+                printMenu();
+                break;
+            case q:
+                break;
+            default:
+                cout << "Please select a valid menu option" << endl;
         }
 
-    }
-    cout << "Current step count: " << stepCount << endl;
-    gpioWrite(MOTOR_ONE_ENABLE_PIN, 0);
-    gpioWrite(MOTOR_ONE_DIRECTION_PIN, 0);
+    } while (input != "q");
+
+    delete motor0;
+
 }
