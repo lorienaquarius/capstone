@@ -56,7 +56,7 @@ void motor::calibrate() {
 
 }
 
-/// Turn the motor a set amount of degrees from the current positiion
+/// Turn the motor a set amount of degrees from the current position
 /// @param degrees How many degrees to turn from the current position. Positive for clockwise, negative for counterclockwise
 void motor::turnRelative(double degrees) {
 
@@ -120,9 +120,6 @@ void motor::reset() {
         }
 
     }
-
-
-
 }
 /// Helper function to turn the motor to a generic encoder count
 /// @param targetCount the target step count

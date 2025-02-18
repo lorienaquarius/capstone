@@ -27,12 +27,12 @@ enum stringCodes {
     d
 };
 
-stringCodes hasher(string in) {
-    if(in == "tr") return tr;
-    else if (in == "ta") return ta;
-    else if (in == "m") return m;
-    else if (in == "q") return q;
-    else if (in == "r") return r;
+stringCodes hasher(string* in) {
+    if(*in == "tr") return tr;
+    else if (*in == "ta") return ta;
+    else if (*in == "m") return m;
+    else if (*in == "q") return q;
+    else if (*in == "r") return r;
     else return d;
 }
 
@@ -56,14 +56,14 @@ int main(int argc, char *argv[]) {
     do {
         printMenu();
         cin >> input;
-        switch(hasher(input)) {
+        switch(hasher(&input)) {
             case tr:
-                cout << "Please enter number of degrees" << endl;
+                cout << "Please enter number of degrees" << endl << ">>> ";
                 cin >> degrees;
                 motor0->turnRelative(stod(degrees));
                 break;
             case ta:
-                cout << "Please enter number of degrees" << endl;
+                cout << "Please enter number of degrees" << endl << ">>> ";
                 cin >> degrees;
                 motor0->turnAbsolute(stod(degrees));
                 break;
@@ -77,7 +77,7 @@ int main(int argc, char *argv[]) {
             case q:
                 break;
             default:
-                cout << "Please select a valid menu option" << endl;
+                cout << "Please select a valid menu option" << endl << ">>> ";
         }
 
     } while (input != "q");
