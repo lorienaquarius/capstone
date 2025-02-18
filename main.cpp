@@ -35,6 +35,7 @@ stringCodes hasher(string* in) {
     else if (*in == "m") return m;
     else if (*in == "q") return q;
     else if (*in == "r") return r;
+    else if (*in == "c") return c;
     else return d;
 }
 
