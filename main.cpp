@@ -15,6 +15,7 @@ void printMenu() {
     cout << "\tta: Turn X degrees relative to the calibrated 0 position" << endl;
     cout << "\tm: Print menu again" << endl;
     cout << "\tr: Reset motor" << endl;
+    cout << "\tc: Calibrate motor" << endl;
     cout << "\tq: Quit" << endl << ">>> ";
 }
 
@@ -24,6 +25,7 @@ enum stringCodes {
     m,
     r,
     q,
+    c,
     d
 };
 
@@ -73,6 +75,10 @@ int main(int argc, char *argv[]) {
             case r:
                 cout << "Attempting reset" << endl;
                 motor0->reset();
+                break;
+            case c:
+                cout << "Calibrating motor" << endl;
+                motor0->calibrate();
                 break;
             case q:
                 break;
