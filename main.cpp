@@ -15,7 +15,7 @@ void printMenu() {
     cout << "\tta: Turn X degrees relative to the calibrated 0 position" << endl;
     cout << "\tm: Print menu again" << endl;
     cout << "\tr: Reset motor" << endl;
-    cout << "\tq: Quit" << endl;
+    cout << "\tq: Quit" << endl << ">>> ";
 }
 
 enum stringCodes {
