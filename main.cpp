@@ -52,7 +52,7 @@ int main(int argc, char *argv[]) {
     sleep(1);
 
     string degrees;
-    auto* motor0 = new motor(0);
+    auto* motor0 = new motor(1);
     motor0->calibrate();
 
     string input;
