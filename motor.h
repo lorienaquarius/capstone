@@ -12,6 +12,7 @@
 #define WORKING_PULSE_WIDTH 8
 #define MAX_STEP_SPEED 8
 #define WORKING_STEP_SPEED 100
+#define WORKING_ENCODER_STEP_SPEED 5000
 
 class motor {
 
