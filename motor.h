@@ -24,6 +24,7 @@ public:
     void calibrate();
     void reset();
     void turnOnce();
+    void readEncoders();
 private:
     void turn(double targetCount);
     int count = 0;

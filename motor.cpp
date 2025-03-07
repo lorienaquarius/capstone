@@ -161,3 +161,8 @@ void motor::turnOnce() {
     usleep(WORKING_ENCODER_STEP_SPEED);
     cout << "Encoder states after step: " << endl << "A: " << gpioRead(MOTOR_ENCODER_A_PIN[motorNum]) << endl << "B: " << gpioRead(MOTOR_ENCODER_B_PIN[motorNum]) <<endl;;
 }
+
+void motor::readEncoders() {
+    cout << "Current encoder values: " << endl << "A: " << gpioRead(MOTOR_ENCODER_A_PIN[motorNum]) << endl << "B: " << gpioRead(MOTOR_ENCODER_B_PIN[motorNum]) << endl << "Z: " << gpioRead(MOTOR_ENCODER_Z_PIN[motorNum]) << endl;
+}
+
