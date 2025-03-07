@@ -138,7 +138,7 @@ inline void motor::turn(double targetCount) {
     if(!direction) {
         while(count < (targetCount)) {
             gpioTrigger(MOTOR_PULSE_PIN[motorNum], 8, 0);
-            usleep(5);
+            usleep(100);
             count++;
         }
     }
