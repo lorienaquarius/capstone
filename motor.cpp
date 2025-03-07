@@ -46,7 +46,7 @@ void motor::calibrate() {
     do {
         while(gpioRead(MOTOR_ENCODER_Z_PIN[motorNum]) < 1) {
             gpioTrigger(MOTOR_PULSE_PIN[motorNum], 8, 0);
-            usleep(7000);
+            usleep(10000);
         }
         cout << "Would you like to set the current position as the zero position? [y/n]" << endl;
         cin >> decision;
