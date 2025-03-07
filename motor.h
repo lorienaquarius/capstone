@@ -30,9 +30,9 @@ private:
     const int MOTOR_DIRECTION_PIN[2] = {8, 17};
     const int MOTOR_ENABLE_PIN[2] = {7, 24};
     const int MOTOR_PULSE_PIN[2] = {12, 10};
-    const int MOTOR_ENCODER_A_PIN[2] = {26, 0};
+    const int MOTOR_ENCODER_A_PIN[2] = {0, 0};
     const int MOTOR_ENCODER_B_PIN[2] = {19, 0};
-    const int MOTOR_ENCODER_Z_PIN[2] = {13, 11};
+    const int MOTOR_ENCODER_Z_PIN[2] = {13, 26};
 };
 
 #endif //MOTOR_H
