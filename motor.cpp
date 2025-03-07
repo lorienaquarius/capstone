@@ -45,7 +45,7 @@ void motor::calibrate() {
     string decision;
     do {
         while(gpioRead(MOTOR_ENCODER_Z_PIN[motorNum]) < 1) {
-            gpioTrigger(MOTOR_PULSE_PIN[motorNum], 8, 0);
+            gpioTrigger(MOTOR_PULSE_PIN[motorNum], WORKING_PULSE_WIDTH, 0);
             cout << "Encoder Z state: " << gpioRead(MOTOR_ENCODER_Z_PIN[motorNum]) << endl;
             usleep(5000);
         }
@@ -83,7 +83,7 @@ void motor::reset() {
 
         // Reset position was undershot, should be somewhere close. Try moving half a revolution, see if we can find it
         for(int i = 0; i < (STEPS_PER_REVOLUTION/2); i++) {
-            gpioTrigger(MOTOR_PULSE_PIN[motorNum], 8, 0);
+            gpioTrigger(MOTOR_PULSE_PIN[motorNum], WORKING_PULSE_WIDTH, 0);
             usleep(5000);
             if(gpioRead(MOTOR_ENCODER_Z_PIN[motorNum]) == 1) {
                 cout << "Reset position found" << endl;
@@ -100,13 +100,13 @@ void motor::reset() {
 
             // Go back to our initial reset position quickly
             for(int i = 0; i < (STEPS_PER_REVOLUTION/2); i++) {
-                gpioTrigger(MOTOR_PULSE_PIN[motorNum], 8, 0);
+                gpioTrigger(MOTOR_PULSE_PIN[motorNum], WORKING_PULSE_WIDTH, 0);
                 usleep(5);
             }
             usleep(5000);
             // Now slowly rotate to try to find the reset position
             for(int i = 0; i < (STEPS_PER_REVOLUTION/2); i++) {
-                gpioTrigger(MOTOR_PULSE_PIN[motorNum], 8, 0);
+                gpioTrigger(MOTOR_PULSE_PIN[motorNum], WORKING_PULSE_WIDTH, 0);
                 usleep(5000);
                 if(gpioRead(MOTOR_ENCODER_Z_PIN[motorNum]) == 1) {
                     found = true;
@@ -137,18 +137,27 @@ inline void motor::turn(double targetCount) {
     // Turn clockwise
     if(!direction) {
         while(count < (targetCount)) {
-            gpioTrigger(MOTOR_PULSE_PIN[motorNum], 8, 0);
-            usleep(500);
+            gpioTrigger(MOTOR_PULSE_PIN[motorNum], WORKING_PULSE_WIDTH, 0);
+            usleep(WORKING_STEP_SPEED);
             count++;
         }
     }
     // Turn counterclockwise
     else {
         while(count > (targetCount)) {
-            gpioTrigger(MOTOR_PULSE_PIN[motorNum], 8, 0);
-            usleep(5);
+            gpioTrigger(MOTOR_PULSE_PIN[motorNum], WORKING_PULSE_WIDTH, 0);
+            usleep(WORKING_STEP_SPEED);
             count--;
         }
     }
     cout << "Turn complete!" << endl;
+}
+
+void motor::turnOnce() {
+    cout << "Turning the motor one step" << endl;
+
+    cout << "Encoder states before step:" << endl << "A: " << gpioRead(MOTOR_ENCODER_A_PIN[motorNum]) << endl << "B: " << gpioRead(MOTOR_ENCODER_B_PIN[motorNum]) <<endl;
+    gpioTrigger(MOTOR_PULSE_PIN[motorNum], WORKING_PULSE_WIDTH, 0);
+    usleep(WORKING_STEP_SPEED);
+    cout << "Encoder states after step: " << endl << "A: " << gpioRead(MOTOR_ENCODER_A_PIN[motorNum]) << endl << "B: " << gpioRead(MOTOR_ENCODER_B_PIN[motorNum]) <<endl;;
 }

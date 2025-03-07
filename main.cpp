@@ -22,6 +22,7 @@ void printMenu() {
 enum stringCodes {
     tr,
     ta,
+    to,
     m,
     r,
     q,
@@ -36,6 +37,7 @@ stringCodes hasher(string* in) {
     else if (*in == "q") return q;
     else if (*in == "r") return r;
     else if (*in == "c") return c;
+    else if (*in == "to") return to;
     else return d;
 }
 
@@ -82,6 +84,10 @@ int main(int argc, char *argv[]) {
                 motor0->calibrate();
                 break;
             case q:
+                break;
+            case to:
+                cout << "Turning once" << endl;
+                motor0->turnOnce();
                 break;
             default:
                 cout << "Please select a valid menu option" << endl << ">>> ";
