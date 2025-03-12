@@ -14,8 +14,11 @@ volatile int ZInt;
 
 
 void encoderZInterrupt(int gpio, int level, uint32_t tick) {
-    cout << "Detected positive edge of index encoder" << endl;
-    ZInt = 1;
+    if (level == 1 && gpio == 17) {
+        cout << "Detected positive edge of pin on pin: " << gpio << << endl;
+        ZInt = 1;
+    }
+
 }
 
 motor::motor(const int motorNum) {
