@@ -15,9 +15,9 @@ volatile int ZInt;
 
 void encoderZInterrupt(int gpio, int level, uint32_t tick) {
     if (level == 1 && gpio == 26) {
-        cout << "Detected positive edge of pin on pin: " << gpio << endl;
         ZInt = 1;
     }
+    cout << "Detected positive edge of pin on pin: " << gpio << endl;
 
 }
 
