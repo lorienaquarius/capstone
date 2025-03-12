@@ -10,6 +10,14 @@
 #include <unistd.h>
 
 using namespace std;
+volatile int ZInt;
+
+
+void encoderZInterrupt(int gpio, int level, uint32_t tick) {
+    cout << "Detected positive edge of index encoder" << endl;
+    ZInt = 1;
+}
+
 motor::motor(const int motorNum) {
     this->motorNum = motorNum;
     int result = 0;
@@ -31,6 +39,10 @@ motor::motor(const int motorNum) {
     gpioWrite(MOTOR_DIRECTION_PIN[motorNum], direction);
     gpioWrite(MOTOR_PULSE_PIN[motorNum], 1);
 
+    ZInt = 0;
+
+    gpioSetISRFunc(MOTOR_ENCODER_Z_PIN[motorNum], 1, 100, encoderZInterrupt);
+
 }
 
 motor::~motor() {
@@ -43,8 +55,9 @@ motor::~motor() {
 void motor::calibrate() {
     cout << "calibrating motor: "<< motorNum << endl;
     string decision;
+    ZInt = 0;
     do {
-        while(gpioRead(MOTOR_ENCODER_Z_PIN[motorNum]) < 1) {
+        while(ZInt < 1) {
             gpioTrigger(MOTOR_PULSE_PIN[motorNum], WORKING_PULSE_WIDTH, 0);
             // cout << "Encoder Z state: " << gpioRead(MOTOR_ENCODER_Z_PIN[motorNum]) << endl;
             usleep(WORKING_ENCODER_STEP_SPEED);
@@ -56,6 +69,8 @@ void motor::calibrate() {
     cout << "Motor calibrated!" << endl;
 
 }
+
+
 
 /// Turn the motor a set amount of degrees from the current position
 /// @param degrees How many degrees to turn from the current position. Positive for clockwise, negative for counterclockwise

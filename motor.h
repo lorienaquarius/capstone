@@ -13,18 +13,23 @@
 #define MAX_STEP_SPEED 8
 #define WORKING_STEP_SPEED 8 // delay between steps in microseconds, while normal spinning
 #define WORKING_ENCODER_STEP_SPEED 10000 // Delay between steps in microseconds, while tryiing to use an encoder
+#include <pigpio.h>
 
 class motor {
 
 public:
+
     explicit motor(int motorNum);
     ~motor();
     void turnRelative(double degrees);
     void turnAbsolute(double degrees);
     void calibrate();
+
+
     void reset();
     void turnOnce();
     void readEncoders();
+
 private:
     void turn(double targetCount);
     int count = 0;
