@@ -15,9 +15,10 @@ volatile int ZInt;
 
 void encoderZInterrupt(int gpio, int level, uint32_t tick) {
     if (level == 1 && gpio == 26) {
-        usleep(500);
+        usleep(50);
         if(gpioRead(gpio) > 0) {
             ZInt = 1;
+            cout << "Got to debounced output" << endl;
         }
     }
 }
