@@ -8,18 +8,14 @@
 #include <ostream>
 #include <pigpio.h>
 #include <unistd.h>
+#include <atomic>
 
 using namespace std;
-volatile int ZInt;
-
+volatile std::atomic<int> ZInt{0};
 
 void encoderZInterrupt(int gpio, int level, uint32_t tick) {
-    if (level == 1 && gpio == 26) {
-        usleep(50);
-        if(gpioRead(gpio) > 0) {
-            ZInt = 1;
-            cout << "Got to debounced output" << endl;
-        }
+    if (level == 1 || level == 2) {
+        ZInt = 1;
     }
 }
 
@@ -46,7 +42,10 @@ motor::motor(const int motorNum) {
 
     ZInt = 0;
 
+    gpioGlitchFilter(MOTOR_ENCODER_Z_PIN[motorNum], 10);
     gpioSetISRFunc(MOTOR_ENCODER_Z_PIN[motorNum], 1, 100, encoderZInterrupt);
+    gpioSetISRFunc(MOTOR_ENCODER_Z_PIN[motorNum], 0, 100, encoderZInterrupt);
+
 
 }
 
