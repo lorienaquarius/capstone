@@ -20,8 +20,6 @@ void encoderZInterrupt(int gpio, int level, uint32_t tick) {
             ZInt = 1;
         }
     }
-    cout << "Detected positive edge of pin on pin: " << gpio << endl;
-
 }
 
 motor::motor(const int motorNum) {
@@ -68,6 +66,7 @@ void motor::calibrate() {
             // cout << "Encoder Z state: " << gpioRead(MOTOR_ENCODER_Z_PIN[motorNum]) << endl;
             usleep(WORKING_ENCODER_STEP_SPEED);
         }
+        ZInt = 0;
         cout << "Would you like to set the current position as the zero position? [y/n]" << endl;
         cin >> decision;
     } while(decision != "y" && decision != "Y");
