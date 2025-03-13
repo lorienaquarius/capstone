@@ -14,7 +14,7 @@ using namespace std;
 volatile std::atomic<int> ZInt{0};
 
 void encoderZInterrupt(int gpio, int level, uint32_t tick) {
-    if (level == 1 || level == 2) {
+    if (level == 1) {
         ZInt = 1;
     }
 }
@@ -44,8 +44,6 @@ motor::motor(const int motorNum) {
 
     gpioGlitchFilter(MOTOR_ENCODER_Z_PIN[motorNum], 10);
     gpioSetISRFunc(MOTOR_ENCODER_Z_PIN[motorNum], 1, 100, encoderZInterrupt);
-    gpioSetISRFunc(MOTOR_ENCODER_Z_PIN[motorNum], 0, 100, encoderZInterrupt);
-
 
 }
 
