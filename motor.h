@@ -12,7 +12,7 @@
 #define WORKING_PULSE_WIDTH 8
 #define MAX_STEP_SPEED 8
 #define WORKING_STEP_SPEED 8 // delay between steps in microseconds, while normal spinning
-#define WORKING_ENCODER_STEP_SPEED 10000 // Delay between steps in microseconds, while tryiing to use an encoder
+#define WORKING_ENCODER_STEP_SPEED 1000 // Delay between steps in microseconds, while tryiing to use an encoder
 #include <pigpio.h>
 
 class motor {
