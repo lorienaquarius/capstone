@@ -42,7 +42,7 @@ motor::motor(const int motorNum) {
 
     ZInt = 0;
 
-    gpioGlitchFilter(MOTOR_ENCODER_Z_PIN[motorNum], 100);
+    gpioGlitchFilter(MOTOR_ENCODER_Z_PIN[motorNum], 200);
     gpioSetISRFunc(MOTOR_ENCODER_Z_PIN[motorNum], 1, 100, encoderZInterrupt);
 
 }
