@@ -147,6 +147,7 @@ inline void motor::turn(double targetCount) {
     if (!direction != (count < targetCount)) {
         direction = !direction;
         gpioWrite(MOTOR_DIRECTION_PIN[motorNum], direction);
+        usleep(500000);
     }
 
     cout << "Motor turning " << (direction ? "counterclockwise" : "clockwise") << endl;
