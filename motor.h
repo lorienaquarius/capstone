@@ -39,12 +39,12 @@ private:
     /* ***********************************************
      * TOP MOTOR IS MOTOR 0, BOTTOM MOTOR IS MOTOR 1 *
      ************************************************/
-    const int MOTOR_DIRECTION_PIN[2] = {8, 17};
-    const int MOTOR_ENABLE_PIN[2] = {7, 24};
-    const int MOTOR_PULSE_PIN[2] = {12, 10};
+    const int MOTOR_DIRECTION_PIN[2] = {20, 3};
+    const int MOTOR_ENABLE_PIN[2] = {16, 4};
+    const int MOTOR_PULSE_PIN[2] = {21, 2};
     const int MOTOR_ENCODER_A_PIN[2] = {0, 19};
     const int MOTOR_ENCODER_B_PIN[2] = {0, 6};
-    const int MOTOR_ENCODER_Z_PIN[2] = {13, 26};
+    const int MOTOR_ENCODER_Z_PIN[2] = {26, 22};
 };
 
 #endif //MOTOR_H
