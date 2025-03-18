@@ -59,7 +59,6 @@ int main(int argc, char *argv[]) {
 
     string degrees;
     auto* motor0 = new motor(0);
-    motor0->calibrate();
 
     string input;
     do {
