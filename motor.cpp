@@ -161,13 +161,11 @@ inline void motor::turn(double targetCount) {
         while(count < (targetCount)) {
             gpioTrigger(MOTOR_PULSE_PIN[motorNum], WORKING_PULSE_WIDTH, 0);
             usleep(WORKING_STEP_SPEED);
-            gpioTrigger(MOTOR_PULSE_PIN[motorNum], WORKING_PULSE_WIDTH, 0);
-            usleep(WORKING_STEP_SPEED);
             curr_a = gpioRead(MOTOR_ENCODER_A_PIN[motorNum]);
             curr_b = gpioRead(MOTOR_ENCODER_B_PIN[motorNum]);
 
             if(curr_a != prev_a || curr_b != prev_b) {
-                count+=2;
+                count++;
             }
             prev_a = curr_a;
             prev_b = curr_b;
@@ -178,13 +176,11 @@ inline void motor::turn(double targetCount) {
         while(count > (targetCount)) {
             gpioTrigger(MOTOR_PULSE_PIN[motorNum], WORKING_PULSE_WIDTH, 0);
             usleep(WORKING_STEP_SPEED);
-            gpioTrigger(MOTOR_PULSE_PIN[motorNum], WORKING_PULSE_WIDTH, 0);
-            usleep(WORKING_STEP_SPEED);
             curr_a = gpioRead(MOTOR_ENCODER_A_PIN[motorNum]);
             curr_b = gpioRead(MOTOR_ENCODER_B_PIN[motorNum]);
 
             if(curr_a != prev_a || curr_b != prev_b) {
-                count-=2;
+                count--;
             }
             prev_a = curr_a;
             prev_b = curr_b;
