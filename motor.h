@@ -37,7 +37,7 @@ private:
     int motorNum;
 
     /* ***********************************************
-     * TOP MOTOR IS MOTOR 0, BOTTOM MOTOR IS MOTOR 1 *
+     * TOP MOTOR IS MOTOR 1, BOTTOM MOTOR IS MOTOR 0 *
      ************************************************/
     const int MOTOR_DIRECTION_PIN[2] = {20, 3};
     const int MOTOR_ENABLE_PIN[2] = {16, 4};
