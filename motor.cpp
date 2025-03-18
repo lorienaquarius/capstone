@@ -169,6 +169,8 @@ inline void motor::turn(double targetCount) {
             if(curr_a != prev_a && curr_b != prev_b) {
                 count++;
             }
+            prev_a = curr_a;
+            prev_b = curr_b;
         }
     }
     // Turn counterclockwise
@@ -184,6 +186,8 @@ inline void motor::turn(double targetCount) {
             if(curr_a != prev_a && curr_b != prev_b) {
                 count--;
             }
+            prev_a = curr_a;
+            prev_b = curr_b;
         }
     }
     cout << "Turn complete!" << endl;
