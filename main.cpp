@@ -14,7 +14,32 @@
 using namespace std;
 
 ///
-/// @return 1 on failure, or don't return if everything is going well
+/// @param dataString The string containing the data to be parsed
+/// @param data the radarData object to put data into
+void parseData(string dataString, radarData* data) {
+    std::vector<std::string> tokens;
+    size_t pos = 0;
+    std::string token;
+    while ((pos = dataString.find(DATA_DELIMITER)) != std::string::npos) {
+        token = dataString.substr(0, pos);
+        tokens.push_back(token);
+        dataString.erase(0, pos + 1);
+    }
+    tokens.push_back(dataString);
+
+    data->target = stoi(tokens[0]);
+    data->posX = stod(tokens[1]);
+    data->posY = stod(tokens[2]);
+    data->posZ = stod(tokens[3]);
+    data->velX = stod(tokens[4]);
+    data->velY = stod(tokens[5]);
+    data->velZ = stod(tokens[6]);
+    data->accX = stod(tokens[7]);
+    data->accY = stod(tokens[8]);
+    data->accZ = stod(tokens[9]);
+
+}
+
 int main(){
     // string pipe_name = "radarpipe";
     // mkfifo(pipe_name.c_str(), 0666);
@@ -32,15 +57,7 @@ int main(){
     cout << "Please put in a data string" << endl;
     cin >> buffer;
 
-    data.target = stoi(buffer.substr(0, buffer.find(DATA_DELIMITER)));
-    data.posX = stod(buffer.substr(1, buffer.find(DATA_DELIMITER)));
-    data.posY = stod(buffer.substr(2, buffer.find(DATA_DELIMITER)));
-    data.velX = stod(buffer.substr(3, buffer.find(DATA_DELIMITER)));
-    data.velY = stod(buffer.substr(4, buffer.find(DATA_DELIMITER)));
-    data.velZ = stod(buffer.substr(5, buffer.find(DATA_DELIMITER)));
-    data.accX = stod(buffer.substr(6, buffer.find(DATA_DELIMITER)));
-    data.accY = stod(buffer.substr(7, buffer.find(DATA_DELIMITER)));
-    data.accZ = stod(buffer.substr(8, buffer.find(DATA_DELIMITER)));
+    parseData(buffer,  &data);
 
     cout << "Parsed radar data" << endl;
     cout << "Target number: " << data.target << endl;

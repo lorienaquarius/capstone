@@ -10,7 +10,7 @@
 
 typedef struct radarData {
 
-    uint8_t target;
+    int target;
     double posX;
     double posY;
     double posZ;
