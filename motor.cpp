@@ -82,7 +82,7 @@ void motor::calibrate() {
 /// @param degrees How many degrees to turn from the current position. Positive for clockwise, negative for counterclockwise
 void motor::turnRelative(double degrees) {
 
-    double targetStepCount = ((degrees * STEPS_PER_REVOLUTION/DEGREES_PER_REVOLUTION * GEAR_RATIO) + count;
+    double targetStepCount = (degrees * STEPS_PER_REVOLUTION/DEGREES_PER_REVOLUTION * GEAR_RATIO) + count;
     turn(targetStepCount);
 }
 
