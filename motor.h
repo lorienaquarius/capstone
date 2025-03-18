@@ -42,8 +42,8 @@ private:
     const int MOTOR_DIRECTION_PIN[2] = {20, 3};
     const int MOTOR_ENABLE_PIN[2] = {16, 4};
     const int MOTOR_PULSE_PIN[2] = {21, 2};
-    const int MOTOR_ENCODER_A_PIN[2] = {0, 19};
-    const int MOTOR_ENCODER_B_PIN[2] = {0, 6};
+    const int MOTOR_ENCODER_A_PIN[2] = {13, 19};
+    const int MOTOR_ENCODER_B_PIN[2] = {6, 0};
     const int MOTOR_ENCODER_Z_PIN[2] = {26, 22};
 };
 
