@@ -9,9 +9,9 @@
 #define DEGREES_PER_REVOLUTION 360
 #define GEAR_RATIO (19.0 + 35.0/157.0)
 #define MIN_PULSE_WIDTH 8
-#define WORKING_PULSE_WIDTH 100
+#define WORKING_PULSE_WIDTH 8
 #define MAX_STEP_SPEED 8
-#define WORKING_STEP_SPEED 5000 // delay between steps in microseconds, while normal spinning
+#define WORKING_STEP_SPEED 8 // delay between steps in microseconds, while normal spinning
 #define WORKING_ENCODER_STEP_SPEED 1000 // Delay between steps in microseconds, while tryiing to use an encoder
 #include <pigpio.h>
 
