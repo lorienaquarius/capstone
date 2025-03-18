@@ -45,6 +45,9 @@ motor::motor(const int motorNum) {
     gpioGlitchFilter(MOTOR_ENCODER_Z_PIN[motorNum], 10);
     gpioSetISRFunc(MOTOR_ENCODER_Z_PIN[motorNum], 1, 100, encoderZInterrupt);
 
+    prev_a = gpioRead(MOTOR_ENCODER_A_PIN[motorNum]);
+    prev_b = gpioRead(MOTOR_ENCODER_B_PIN[motorNum]);
+
 }
 
 motor::~motor() {
@@ -79,14 +82,14 @@ void motor::calibrate() {
 /// @param degrees How many degrees to turn from the current position. Positive for clockwise, negative for counterclockwise
 void motor::turnRelative(double degrees) {
 
-    double targetStepCount = (degrees * STEPS_PER_REVOLUTION/DEGREES_PER_REVOLUTION * GEAR_RATIO) + count;
+    double targetStepCount = (degrees * STEPS_PER_REVOLUTION/DEGREES_PER_REVOLUTION * GEAR_RATIO) / 2 + count;
     turn(targetStepCount);
 }
 
 /// Function to turn to a certain angle relative to the selected 0 positiion
 /// @param degrees How many degrees to turn from the calibrated 0 position
 void motor::turnAbsolute(double degrees) {
-    double targetStepCount = (degrees * STEPS_PER_REVOLUTION/DEGREES_PER_REVOLUTION * GEAR_RATIO);
+    double targetStepCount = (degrees * STEPS_PER_REVOLUTION/DEGREES_PER_REVOLUTION * GEAR_RATIO) / 2; // To work with encoders better, take 2 steps at a time
     turn(targetStepCount);
 }
 
@@ -158,7 +161,14 @@ inline void motor::turn(double targetCount) {
         while(count < (targetCount)) {
             gpioTrigger(MOTOR_PULSE_PIN[motorNum], WORKING_PULSE_WIDTH, 0);
             usleep(WORKING_STEP_SPEED);
-            count++;
+            gpioTrigger(MOTOR_PULSE_PIN[motorNum], WORKING_PULSE_WIDTH, 0);
+            usleep(WORKING_STEP_SPEED);
+            curr_a = gpioRead(MOTOR_ENCODER_A_PIN[motorNum]);
+            curr_b = gpioRead(MOTOR_ENCODER_B_PIN[motorNum]);
+
+            if(curr_a != prev_a && curr_b != prev_b) {
+                count++;
+            }
         }
     }
     // Turn counterclockwise
@@ -166,7 +176,14 @@ inline void motor::turn(double targetCount) {
         while(count > (targetCount)) {
             gpioTrigger(MOTOR_PULSE_PIN[motorNum], WORKING_PULSE_WIDTH, 0);
             usleep(WORKING_STEP_SPEED);
-            count--;
+            gpioTrigger(MOTOR_PULSE_PIN[motorNum], WORKING_PULSE_WIDTH, 0);
+            usleep(WORKING_STEP_SPEED);
+            curr_a = gpioRead(MOTOR_ENCODER_A_PIN[motorNum]);
+            curr_b = gpioRead(MOTOR_ENCODER_B_PIN[motorNum]);
+
+            if(curr_a != prev_a && curr_b != prev_b) {
+                count--;
+            }
         }
     }
     cout << "Turn complete!" << endl;

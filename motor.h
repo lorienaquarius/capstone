@@ -35,6 +35,10 @@ private:
     int count = 0;
     bool direction = false;
     int motorNum;
+    bool prev_a;
+    bool prev_b;
+    bool curr_a;
+    bool curr_b;
 
     /* ***********************************************
      * TOP MOTOR IS MOTOR 1, BOTTOM MOTOR IS MOTOR 0 *
