@@ -4,4 +4,4 @@ project(capstone)
 set(CMAKE_CXX_STANDARD 14)
 
 add_executable(capstone
-    main.cpp)
+        PipeRec.cpp)
