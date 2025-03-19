@@ -45,5 +45,4 @@ add_executable(capstone
     motor.h
     main.cpp
         radar.h
-        PipeRec.cpp
 )
