@@ -43,7 +43,7 @@ private:
     /* ***********************************************
      * TOP MOTOR IS MOTOR 1, BOTTOM MOTOR IS MOTOR 0 *
      ************************************************/
-    const int MOTOR_DIRECTION_PIN[2] = {20, 3};
+    const int MOTOR_DIRECTION_PIN[2] = {28, 3};
     const int MOTOR_ENABLE_PIN[2] = {16, 4};
     const int MOTOR_PULSE_PIN[2] = {21, 2};
     const int MOTOR_ENCODER_A_PIN[2] = {13, 12};
