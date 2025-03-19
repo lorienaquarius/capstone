@@ -41,27 +41,30 @@ void parseData(string dataString, radarData* data) {
 }
 
 int main(){
-    // string pipe_name = "radarpipe";
-    // mkfifo(pipe_name.c_str(), 0666);
-    // cout << "waiting for messages...";
-    // int fd = open(pipe_name.c_str(), O_RDONLY);
-    // if(fd == -1){
-    //     std::cerr << "Pipe error!";
-    //     return 1;
-    // }
+    string pipe_name = "radarpipe";
+    mkfifo(pipe_name.c_str(), 0666);
+    cout << "waiting for messages...";
+    int fd = open(pipe_name.c_str(), O_RDONLY);
+    if(fd == -1){
+        std::cerr << "Pipe error!";
+        return 1;
+    }
 
     char buffer_raw[128];
-    string buffer(buffer_raw);
     radarData data;
-    cmatch match;
-    cout << "Please put in a data string" << endl;
-    cin >> buffer;
 
-    parseData(buffer,  &data);
+    while(true) {
+        ssize_t bytesRead = read(fd,buffer_raw,sizeof(buffer_raw)-1);
+        if (bytesRead >0) {
+            string buffer(buffer_raw);
+            parseData(buffer,  &data);
+        }
+    }
 
-    cout << "Parsed radar data" << endl;
-    cout << "Target number: " << data.target << endl;
-    cout << "Position Data: X: " << data.posX << " Y: " << data.posY << " Z: " << data.posZ << endl;
-    cout << "Velocity Data: X: " << data.velX << " Y: " << data.velY << " Z: " << data.velZ << endl;
-    cout << "Acceleration Data: X: " << data.accX << " Y: " << data.accY << " Z: " << data.accZ << endl;
+
+    // cout << "Parsed radar data" << endl;
+    // cout << "Target number: " << data.target << endl;
+    // cout << "Position Data: X: " << data.posX << " Y: " << data.posY << " Z: " << data.posZ << endl;
+    // cout << "Velocity Data: X: " << data.velX << " Y: " << data.velY << " Z: " << data.velZ << endl;
+    // cout << "Acceleration Data: X: " << data.accX << " Y: " << data.accY << " Z: " << data.accZ << endl;
 }
