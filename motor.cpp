@@ -22,6 +22,7 @@ void encoderZInterrupt(int gpio, int level, uint32_t tick) {
 motor::motor(const int motorNum) {
     this->motorNum = motorNum;
     int result = 0;
+    count = 0;
 
     result |= gpioSetMode(MOTOR_DIRECTION_PIN[motorNum], PI_OUTPUT);
     result |= gpioSetMode(MOTOR_ENABLE_PIN[motorNum], PI_OUTPUT);
@@ -58,22 +59,8 @@ motor::~motor() {
 
 /// Calibration function to choose a zero starting position
 void motor::calibrate() {
-    cout << "calibrating motor: "<< motorNum << endl;
-    string decision;
-    ZInt = 0;
-    do {
-        while(ZInt < 1) {
-            gpioTrigger(MOTOR_PULSE_PIN[motorNum], WORKING_PULSE_WIDTH, 0);
-            // cout << "Encoder Z state: " << gpioRead(MOTOR_ENCODER_Z_PIN[motorNum]) << endl;
-            usleep(WORKING_ENCODER_STEP_SPEED);
-        }
-        ZInt = 0;
-        cout << "Would you like to set the current position as the zero position? [y/n]" << endl;
-        cin >> decision;
-    } while(decision != "y" && decision != "Y");
     count = 0;
-    cout << "Motor calibrated!" << endl;
-
+    cout << "Motor " << motorNum << " calibrated!" << endl;
 }
 
 

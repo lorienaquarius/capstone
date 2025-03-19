@@ -12,13 +12,13 @@
 #include <unistd.h>
 
 #include "radar.h"
-
+#include "PipeRec.h"
 using namespace std;
 
 ///
 /// @param dataString The string containing the data to be parsed
 /// @param data the radarData object to put data into
-void parseData(string dataString, radarData* data) {
+void parseRadarData(string dataString, radarData* data, mutex* radarMutex) {
     std::vector<std::string> tokens;
     size_t pos = 0;
     std::string token;
@@ -28,7 +28,7 @@ void parseData(string dataString, radarData* data) {
         dataString.erase(0, pos + 1);
     }
     tokens.push_back(dataString);
-
+    radarMutex->lock();
     data->target = stoi(tokens[0]);
     data->posX = stod(tokens[1]);
     data->posY = stod(tokens[2]);
@@ -39,27 +39,26 @@ void parseData(string dataString, radarData* data) {
     data->accX = stod(tokens[7]);
     data->accY = stod(tokens[8]);
     data->accZ = stod(tokens[9]);
+    radarMutex->unlock();
 
 }
 
-int readData(radarData* data, mutex radarMutex){
+void readData(radarData* data, mutex* radarMutex){
     string pipe_name = "radarpipe";
     mkfifo(pipe_name.c_str(), 0666);
     cout << "waiting for messages...";
     int fd = open(pipe_name.c_str(), O_RDONLY);
     if(fd == -1){
         std::cerr << "Pipe error!";
-        return 1;
+        return;
     }
 
     char buffer_raw[128];
-    radarData data;
-
     while(true) {
         ssize_t bytesRead = read(fd,buffer_raw,sizeof(buffer_raw)-1);
         if (bytesRead >0) {
             string buffer(buffer_raw);
-            parseData(buffer,  &data);
+            parseRadarData(buffer,  data, radarMutex);
         }
     }
 

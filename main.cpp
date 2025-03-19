@@ -2,10 +2,12 @@
 #include <stdlib.h>
 #include <iostream>
 #include <mutex>
+#include <math.h>
 #include <thread>
 #include <unistd.h>
 #include "motor.h"
 #include "radar.h"
+#include "PipeRec.h"
 
 #define MICROSTEPS = 2
 
@@ -13,13 +15,10 @@ using namespace std;
 
 void printMenu() {
     cout << "Main menu" << endl;
-    cout << "\ttr: Turn X degrees relative to the current position" << endl;
-    cout << "\tta: Turn X degrees relative to the calibrated 0 position" << endl;
-    cout << "\tm: Print menu again" << endl;
     cout << "\tr: Reset motor" << endl;
-    cout << "\tc: Calibrate motor" << endl;
+    cout << "\tc: Calibrate motor manually" << endl;
     cout << "\tto: Turn one step" << endl;
-    cout << "\tre: Read current encoder values" << endl;
+    cout << "\ts: start detection program" << endl;
     cout << "\tq: Quit" << endl << ">>> ";
 }
 
@@ -32,7 +31,8 @@ enum stringCodes {
     q,
     c,
     d,
-    re
+    re,
+    s
 };
 
 stringCodes hasher(string* in) {
@@ -44,6 +44,7 @@ stringCodes hasher(string* in) {
     else if (*in == "c") return c;
     else if (*in == "to") return to;
     else if (*in == "re") return re;
+    else if (*in == "s") return s;
     else return d;
 }
 
@@ -54,14 +55,9 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
 
-    cout << "Welcome to the stepper motor turning application, let's start by calibrating a motor!" << endl;
-    sleep(1);
-    cout << "The motor will start by turning clockwise to the nearest index position" << endl;
-    sleep(1);
-
     string degrees;
-    auto* motor0 = new motor(0);
-    auto* motor1 = new motor(1);
+    motor motor0(0);
+    motor motor1(1);
 
     radarData radarInfo;
     mutex radarDataMutex;
@@ -71,43 +67,81 @@ int main(int argc, char *argv[]) {
         printMenu();
         cin >> input;
         switch(hasher(&input)) {
-            case tr:
-                cout << "Please enter number of degrees" << endl << ">>> ";
-                cin >> degrees;
-                motor0->turnRelative(stod(degrees));
-                break;
-            case ta:
-                cout << "Please enter number of degrees" << endl << ">>> ";
-                cin >> degrees;
-                motor0->turnAbsolute(stod(degrees));
-                break;
             case m:
                 printMenu();
                 break;
             case r:
                 cout << "Attempting reset" << endl;
-                motor0->reset();
+                motor0.reset();
                 break;
             case c:
-                cout << "Calibrating motor" << endl;
-                motor0->calibrate();
+                cout << "Entering Calibration menu" << endl;
+                cout << "For reference, motor 0 controls the base, motor 1 controls the arm" << endl;
+                {
+                    string calibrationInput;
+                    while(input != "q") {
+                        cout << "Please enter which motor to turn and number of degrees" << endl << ">>> ";
+                        cin >> input;
+                        int motorNumber = stoi(calibrationInput.substr(0, 1)); // motor number should be the first thing
+                        double degrees = stod(calibrationInput.substr(2, input.length() - 2)); // degrees to turn should be the rest of the text
+                        cout << "Turning motor number " << motorNumber << " " << degrees << " degrees" << endl;
+                        if(motorNumber) {
+                            motor1.turnRelative(degrees);
+                        } else {
+                            motor0.turnRelative(degrees);
+                        }
+                    }
+                    motor0.calibrate();
+                    motor1.calibrate();
+                }
                 break;
             case q:
                 break;
             case to:
                 cout << "Turning once" << endl;
-                motor0->turnOnce();
+                motor0.turnOnce();
                 break;
             case re:
-                motor0->readEncoders();
+                motor0.readEncoders();
                 break;
             default:
                 cout << "Please select a valid menu option" << endl << ">>> ";
         }
 
-    } while (input != "q");
+    } while (input != "q" || input != "s");
+    if(input == "q") {
+        cout << "quitting program" << endl;
+        exit(0);
+    }
 
-    delete motor0;
-    delete motor1;
+    thread pipeThread(readData, &radarInfo, &radarDataMutex);
+    double motor0Angle;
+    double motor1Angle;
+
+    double radarX;
+    double radarY;
+    double radarZ;
+
+    while(1) {
+        radarDataMutex.lock();
+
+
+        // There is an axis transformation from the radar to the camera, which is why the coordinates are a bit shuffled
+        radarX = radarInfo.posZ + 347; // Measured offsets from the radar to the camera
+        radarY = radarInfo.posY - 161; // Measured offset from the radar to the camera
+        radarZ = -radarInfo.posX;
+        radarDataMutex.unlock();
+
+        motor0Angle = tan(radarZ / radarX) * 180 / M_PI;
+        motor1Angle = tan(radarY / sqrt(pow(radarX, 2) + pow(radarY, 2))) * 180 / M_PI;
+
+        // Get Axes turning at the same time
+        thread turnThread(&motor::turnAbsolute, &motor1, motor1Angle);
+        motor0.turnAbsolute(motor0Angle);
+
+        // Make sure both are finished before reading again
+        turnThread.join();
+    }
+
 
 }
