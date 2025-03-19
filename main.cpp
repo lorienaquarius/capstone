@@ -1,9 +1,11 @@
 #include <pigpio.h>
 #include <stdlib.h>
 #include <iostream>
+#include <mutex>
+#include <thread>
 #include <unistd.h>
 #include "motor.h"
-
+#include "radar.h"
 
 #define MICROSTEPS = 2
 
@@ -59,6 +61,10 @@ int main(int argc, char *argv[]) {
 
     string degrees;
     auto* motor0 = new motor(0);
+    auto* motor1 = new motor(1);
+
+    radarData radarInfo;
+    mutex radarDataMutex;
 
     string input;
     do {
@@ -102,5 +108,6 @@ int main(int argc, char *argv[]) {
     } while (input != "q");
 
     delete motor0;
+    delete motor1;
 
 }

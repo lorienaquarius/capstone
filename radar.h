@@ -6,6 +6,8 @@
 #define RADAR_H
 #include <cstdint>
 
+#define DATA_DELIMITER '|'
+
 typedef struct radarData {
 
     int target;
