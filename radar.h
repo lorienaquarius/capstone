@@ -8,7 +8,7 @@
 
 typedef struct radarData {
 
-    uint8_t target;
+    int target;
     double posX;
     double posY;
     double posZ;
@@ -24,3 +24,4 @@ typedef struct radarData {
 } radarData;
 
 #endif //RADAR_H
+

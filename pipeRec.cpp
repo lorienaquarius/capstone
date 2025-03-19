@@ -10,7 +10,7 @@
 
 using namespace std;
 
-/// 
+///
 /// @return 1 on failure, or don't return if everything is going well
 int readRadarData(){
     string pipe_name = "radarpipe";
