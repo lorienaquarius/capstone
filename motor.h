@@ -11,7 +11,7 @@
 #define MIN_PULSE_WIDTH 8
 #define WORKING_PULSE_WIDTH 100
 #define MAX_STEP_SPEED 8
-#define WORKING_STEP_SPEED 50 // delay between steps in microseconds, while normal spinning
+#define WORKING_STEP_SPEED 1000 // delay between steps in microseconds, while normal spinning
 #define WORKING_ENCODER_STEP_SPEED 1000 // Delay between steps in microseconds, while tryiing to use an encoder
 #include <pigpio.h>
 
