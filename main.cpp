@@ -44,7 +44,7 @@ void parseRadarData(string dataString, radarData* data, mutex* radarMutex) {
 }
 
 void readData(radarData* data, mutex* radarMutex){
-    string pipe_name = "radarpipe";
+    string pipe_name = "../radarpipe";
     mkfifo(pipe_name.c_str(), 0666);
     cout << "waiting for messages...";
     int fd = open(pipe_name.c_str(), O_RDONLY);
@@ -185,13 +185,12 @@ int main(int argc, char *argv[]) {
     double motor0Angle;
     double motor1Angle;
 
-    double radarX;
-    double radarY;
-    double radarZ;
+    double radarX = 0;
+    double radarY = 0;
+    double radarZ = 0;
 
     while(1) {
         radarDataMutex.lock();
-
         // There is an axis transformation from the radar to the camera, which is why the coordinates are a bit shuffled
         radarX = radarInfo.posZ + 0.347; // Measured offsets from the radar to the camera
         radarY = radarInfo.posY - 0.161; // Measured offset from the radar to the camera
