@@ -196,8 +196,8 @@ int main(int argc, char *argv[]) {
         radarDataMutex.lock();
 
         // There is an axis transformation from the radar to the camera, which is why the coordinates are a bit shuffled
-        radarX = radarInfo.posZ + 347; // Measured offsets from the radar to the camera
-        radarY = radarInfo.posY - 161; // Measured offset from the radar to the camera
+        radarX = radarInfo.posZ + 0.347; // Measured offsets from the radar to the camera
+        radarY = radarInfo.posY - 0.161; // Measured offset from the radar to the camera
         radarZ = -radarInfo.posX;
         radarDataMutex.unlock();
 
