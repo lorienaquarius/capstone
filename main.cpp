@@ -142,9 +142,15 @@ int main(int argc, char *argv[]) {
                     while(calibrationInput != "q") {
                         cout << "Please enter which motor to turn" << endl << ">>> ";
                         cin >> calibrationInput;
+                        if (calibrationInput == "q") {
+                            break;
+                        }
                         int motorNumber = stoi(calibrationInput); // motor number should be the first thing
                         cout << "Please enter the number of degrees to turn" << endl << ">>> ";
                         cin >> calibrationInput;
+                        if (calibrationInput == "q") {
+                            break;
+                        }
                         double degrees = stod(calibrationInput); // degrees to turn should be the rest of the text
                         cout << "Turning motor number " << motorNumber << " " << degrees << " degrees" << endl;
                         if(motorNumber) {
