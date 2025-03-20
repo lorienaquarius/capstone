@@ -176,7 +176,7 @@ int main(int argc, char *argv[]) {
                 cout << "Please select a valid menu option" << endl << ">>> ";
         }
 
-    } while (input != "q" || input != "s");
+    } while (input != "q" && input != "s");
     if(input == "q") {
         cout << "quitting program" << endl;
         exit(0);
