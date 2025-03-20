@@ -30,7 +30,6 @@ void parseRadarData(string dataString, radarData* data, mutex* radarMutex) {
     }
     tokens.push_back(dataString);
     radarMutex->lock();
-    cout << "dataParser locking mutex" << endl;
     data->target = stoi(tokens[0]);
     data->posX = stod(tokens[1]);
     data->posY = stod(tokens[2]);
@@ -42,8 +41,6 @@ void parseRadarData(string dataString, radarData* data, mutex* radarMutex) {
     data->accY = stod(tokens[8]);
     data->accZ = stod(tokens[9]);
     radarMutex->unlock();
-    cout << "dataParse unlocking mutex" << endl;
-
 }
 
 void readData(radarData* data, mutex* radarMutex){
@@ -200,6 +197,8 @@ int main(int argc, char *argv[]) {
         radarY = radarInfo.posY - 0.161; // Measured offset from the radar to the camera
         radarZ = -radarInfo.posX;
         radarDataMutex.unlock();
+
+        cout << "Got position X: " << radarX << " Y: " << radarY << " Z: " << radarZ << endl;
 
         motor0Angle = atan(radarZ / radarX) * 180 / M_PI;
         motor1Angle = atan(radarY / sqrt(pow(radarX, 2) + pow(radarY, 2))) * 180 / M_PI;
