@@ -140,10 +140,12 @@ int main(int argc, char *argv[]) {
                 {
                     string calibrationInput;
                     while(calibrationInput != "q") {
-                        cout << "Please enter which motor to turn and number of degrees" << endl << ">>> ";
+                        cout << "Please enter which motor to turn" << endl << ">>> ";
                         cin >> calibrationInput;
-                        int motorNumber = stoi(calibrationInput.substr(0, 1)); // motor number should be the first thing
-                        double degrees = stod(calibrationInput.substr(2, input.length() - 3)); // degrees to turn should be the rest of the text
+                        int motorNumber = stoi(calibrationInput); // motor number should be the first thing
+                        cout << "Please enter the number of degrees to turn" << endl << ">>> ";
+                        cin >> calibrationInput;
+                        double degrees = stod(calibrationInput); // degrees to turn should be the rest of the text
                         cout << "Turning motor number " << motorNumber << " " << degrees << " degrees" << endl;
                         if(motorNumber) {
                             motor1.turnRelative(degrees);
