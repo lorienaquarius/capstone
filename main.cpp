@@ -40,7 +40,11 @@ void parseRadarData(string dataString, radarData* data, mutex* radarMutex) {
     data->accX = stod(tokens[7]);
     data->accY = stod(tokens[8]);
     data->accZ = stod(tokens[9]);
+
+    cout << "Got position X: " << data->posX << " Y: " << data->posY << " Z: " << data->posZ << endl;
     radarMutex->unlock();
+
+
 }
 
 void readData(radarData* data, mutex* radarMutex){
@@ -197,7 +201,6 @@ int main(int argc, char *argv[]) {
         radarZ = -radarInfo.posX;
         radarDataMutex.unlock();
 
-        cout << "Got position X: " << radarX << " Y: " << radarY << " Z: " << radarZ << endl;
 
         motor0Angle = atan(radarZ / radarX) * 180 / M_PI;
         motor1Angle = atan(radarY / sqrt(pow(radarX, 2) + pow(radarY, 2))) * 180 / M_PI;
