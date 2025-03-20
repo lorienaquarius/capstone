@@ -191,8 +191,8 @@ int main(int argc, char *argv[]) {
         radarZ = -radarInfo.posX;
         radarDataMutex.unlock();
 
-        motor0Angle = tan(radarZ / radarX) * 180 / M_PI;
-        motor1Angle = tan(radarY / sqrt(pow(radarX, 2) + pow(radarY, 2))) * 180 / M_PI;
+        motor0Angle = atan(radarZ / radarX) * 180 / M_PI;
+        motor1Angle = atan(radarY / sqrt(pow(radarX, 2) + pow(radarY, 2))) * 180 / M_PI;
 
         // Get Axes turning at the same time
         thread turnThread(&motor::turnAbsolute, &motor1, motor1Angle);
