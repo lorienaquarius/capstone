@@ -42,7 +42,7 @@ void parseRadarData(string dataString, radarData* data, mutex* radarMutex) {
     data->accY = stod(tokens[8]);
     data->accZ = stod(tokens[9]);
 
-    cout << "Got position X: " << data->posX << " Y: " << data->posY << " Z: " << data->posZ << endl;
+    //cout << "Got position X: " << data->posX << " Y: " << data->posY << " Z: " << data->posZ << endl;
     radarMutex->unlock();
 
 
@@ -51,7 +51,7 @@ void parseRadarData(string dataString, radarData* data, mutex* radarMutex) {
 void readData(radarData* data, mutex* radarMutex){
     string pipe_name = "../radarpipe";
     mkfifo(pipe_name.c_str(), 0666);
-    cout << "waiting for messages...";
+    //cout << "waiting for messages...";
     int fd = open(pipe_name.c_str(), O_RDONLY);
     if(fd == -1){
         std::cerr << "Pipe error!";
@@ -203,8 +203,8 @@ int main(int argc, char *argv[]) {
         radarDataMutex.unlock();
 
 
-        motor0Angle = -atan2(radarZ / radarX) * 180 / M_PI;
-        motor1Angle = atan2(radarY / sqrt(pow(radarX, 2) + pow(radarY, 2))) * 180 / M_PI;
+        motor0Angle = -atan2(radarZ , radarX) * 180 / M_PI;
+        motor1Angle = atan2(radarY , sqrt(pow(radarX, 2) + pow(radarZ, 2))) * 180 / M_PI;
         cout << "Turning to pan: " << motor0Angle << "tilt: " << motor1Angle << endl;
         // Get Axes turning at the same time
         thread turnThread(&motor::turnAbsolute, &motor1, motor1Angle);

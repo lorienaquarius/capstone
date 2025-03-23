@@ -140,8 +140,8 @@ inline void motor::turn(double targetCount) {
         usleep(6);
     }
 
-    cout << "Motor turning " << (direction ? "counterclockwise" : "clockwise") << endl;
-    cout << "Current count: " << count << "\nTarget count: " << targetCount << endl;
+    //cout << "Motor turning " << (direction ? "counterclockwise" : "clockwise") << endl;
+    //cout << "Current count: " << count << "\nTarget count: " << targetCount << endl;
 
     // Turn clockwise
     if(!direction) {
