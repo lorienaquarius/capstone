@@ -4,6 +4,7 @@
 #include <iostream>
 #include <mutex>
 #include <math.h>
+#include <cmath>
 #include <thread>
 #include <unistd.h>
 #include <vector>
@@ -202,8 +203,8 @@ int main(int argc, char *argv[]) {
         radarDataMutex.unlock();
 
 
-        motor0Angle = -atan(radarZ / radarX) * 180 / M_PI;
-        motor1Angle = atan(radarY / sqrt(pow(radarX, 2) + pow(radarY, 2))) * 180 / M_PI;
+        motor0Angle = -atan2(radarZ / radarX) * 180 / M_PI;
+        motor1Angle = atan2(radarY / sqrt(pow(radarX, 2) + pow(radarY, 2))) * 180 / M_PI;
         cout << "Turning to pan: " << motor0Angle << "tilt: " << motor1Angle << endl;
         // Get Axes turning at the same time
         thread turnThread(&motor::turnAbsolute, &motor1, motor1Angle);
