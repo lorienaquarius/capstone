@@ -1,3 +1,4 @@
+#include <atomic>
 #include <fcntl.h>
 #include <pigpio.h>
 #include <stdlib.h>
@@ -118,13 +119,16 @@ int main(int argc, char *argv[]) {
         cout << "Failed to initialize GPIO" << endl;
         exit(1);
     }
-
-    string degrees;
-    motor motor0(0);
-    motor motor1(1);
-
+    atomic<bool> dataUpdated;
     radarData radarInfo;
     mutex radarDataMutex;
+    mutex dataUpdatedMutex;
+
+    string degrees;
+    motor motor0(0, &dataUpdatedMutex, &dataUpdated);
+    motor motor1(1, &dataUpdatedMutex, &dataUpdated);
+
+
 
     string input;
     do {
@@ -187,12 +191,20 @@ int main(int argc, char *argv[]) {
     }
 
     thread pipeThread(readData, &radarInfo, &radarDataMutex);
-    double motor0Angle;
-    double motor1Angle;
+    double motor0Angle = 0;
+    double motor1Angle = 0;
+    double prevMotor0Angle = 0;
+    double prevMotor1Angle = 0;
 
     double radarX = 0;
     double radarY = 0;
     double radarZ = 0;
+
+    bool localUpdated = false;
+
+    // Get Axes turning at the same time
+    thread turn1Thread(&motor::turnAbsolute, &motor1, motor1Angle);
+    thread turn0Thread(&motor::turnAbsolute, &motor0, motor0Angle);
 
     while(1) {
         radarDataMutex.lock();
@@ -202,16 +214,37 @@ int main(int argc, char *argv[]) {
         radarZ = -radarInfo.posX;
         radarDataMutex.unlock();
 
-
         motor0Angle = atan2(radarZ , radarX) * 180 / M_PI;
         motor1Angle = atan(radarY / sqrt(pow(radarX, 2) + pow(radarY, 2))) * 180 / M_PI;
         cout << "Turning to pan: " << motor0Angle << "tilt: " << motor1Angle << endl;
-        // Get Axes turning at the same time
-        thread turnThread(&motor::turnAbsolute, &motor1, motor1Angle);
-        motor0.turnAbsolute(motor0Angle);
 
-        // Make sure both are finished before reading again
-        turnThread.join();
+        if(radarX <= 0) {
+            localUpdated = false;
+        } else if(motor0Angle > 50 || motor0Angle < -50) {
+            localUpdated = false;
+        } else if((abs(motor0Angle - prevMotor0Angle) > 45)) {
+            localUpdated = false;
+        } else if(prevMotor0Angle == motor0Angle && prevMotor1Angle == motor1Angle) {
+            localUpdated = false;
+        } else {
+            localUpdated = true;
+        }
+
+        dataUpdated = localUpdated;
+
+        if(localUpdated) {
+            turn0Thread.join();
+            turn1Thread.join();
+            thread turn1Thread(&motor::turnAbsolute, &motor1, motor1Angle);
+            thread turn0Thread(&motor::turnAbsolute, &motor0, motor0Angle);
+            dataUpdated = false;
+        }
+        // Get Axes turning at the same time
+
+
+        prevMotor0Angle = motor0Angle;
+        prevMotor1Angle = motor1Angle;
+
     }
 
 }

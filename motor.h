@@ -11,15 +11,18 @@
 #define MIN_PULSE_WIDTH 8
 #define WORKING_PULSE_WIDTH 100
 #define MAX_STEP_SPEED 8
-#define WORKING_STEP_SPEED 1000 // delay between steps in microseconds, while normal spinning
+#define WORKING_STEP_SPEED 500 // delay between steps in microseconds, while normal spinning
 #define WORKING_ENCODER_STEP_SPEED 1000 // Delay between steps in microseconds, while tryiing to use an encoder
+#include <atomic>
+#include <mutex>
 #include <pigpio.h>
+
 
 class motor {
 
 public:
 
-    explicit motor(int motorNum);
+    explicit motor(int motorNum, std::mutex* dataUpdateMutex, std::atomic<bool>* dataUpdated);
     ~motor();
     void turnRelative(double degrees);
     void turnAbsolute(double degrees);
@@ -31,6 +34,8 @@ public:
     void readEncoders();
 
 private:
+    std::mutex* dataUpdatedMutex;
+    std::atomic<bool>* dataUpdated;
     void turn(double targetCount);
     int count = 0;
     bool direction = false;

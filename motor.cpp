@@ -19,8 +19,11 @@ void encoderZInterrupt(int gpio, int level, uint32_t tick) {
     }
 }
 
-motor::motor(const int motorNum) {
+motor::motor(const int motorNum, mutex* dataUpdatedMutex, atomic<bool>* dataUpdated) {
     this->motorNum = motorNum;
+    this->dataUpdatedMutex = dataUpdatedMutex;
+    this->dataUpdated = dataUpdated;
+
     int result = 0;
     count = 0;
 
@@ -160,7 +163,7 @@ inline void motor::turn(double targetCount) {
     }
     // Turn counterclockwise
     else {
-        while(count > (targetCount)) {
+        while(count > (targetCount) && !dataUpdated) {
             gpioTrigger(MOTOR_PULSE_PIN[motorNum], WORKING_PULSE_WIDTH, 0);
             usleep(WORKING_STEP_SPEED);
             curr_a = gpioRead(MOTOR_ENCODER_A_PIN[motorNum]);
