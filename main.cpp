@@ -243,6 +243,8 @@ int main(int argc, char *argv[]) {
         prevMotor0Angle = motor0Angle;
         prevMotor1Angle = motor1Angle;
 
+        usleep(1000);
+
     }
 
 }
