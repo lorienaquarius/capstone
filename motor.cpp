@@ -212,9 +212,10 @@ inline void motor::turn(double targetCount) {
             curr_a = gpioRead(MOTOR_ENCODER_A_PIN[motorNum]);
             curr_b = gpioRead(MOTOR_ENCODER_B_PIN[motorNum]);
 
-            if(curr_a != prev_a || curr_b != prev_b) {
-                count++;
-            }
+            // if(curr_a != prev_a || curr_b != prev_b) {
+            //     count++;
+            // }
+            count++;
             prev_a = curr_a;
             prev_b = curr_b;
         }
@@ -227,9 +228,10 @@ inline void motor::turn(double targetCount) {
             curr_a = gpioRead(MOTOR_ENCODER_A_PIN[motorNum]);
             curr_b = gpioRead(MOTOR_ENCODER_B_PIN[motorNum]);
 
-            if(curr_a != prev_a || curr_b != prev_b) {
-                count--;
-            }
+            // if(curr_a != prev_a || curr_b != prev_b) {
+            //     count--;
+            // }
+            count--;
             prev_a = curr_a;
             prev_b = curr_b;
         }
