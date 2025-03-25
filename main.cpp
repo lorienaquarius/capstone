@@ -62,7 +62,6 @@ void readData(radarData* data, mutex* radarMutex){
     char buffer_raw[128];
     while(true) {
         ssize_t bytesRead = read(fd,buffer_raw,sizeof(buffer_raw)-1);
-        cout << "Read data from pipe" << endl;
         if (bytesRead >0) {
             string buffer(buffer_raw);
             parseRadarData(buffer,  data, radarMutex);
@@ -218,14 +217,14 @@ int main(int argc, char *argv[]) {
 
         motor0Angle = -atan2(radarZ , radarX) * 180.0 / M_PI;
         motor1Angle = atan(radarY / sqrt(pow(radarX, 2) + pow(radarY, 2))) * 180.0 / M_PI;
-        // cout << "Turning to pan: " << motor0Angle << "tilt: " << motor1Angle << endl;
+         cout << "Calculated pan of: " << motor0Angle << " and tilt: " << motor1Angle << endl;
 
         // Denoising conditions. Only update the angle to turn to if it's a real update
         if(radarX <= 0) {
             localUpdated = false;
-        } else if(motor0Angle > 50 || motor0Angle < -50) {
+        } else if(motor0Angle > 90 || motor0Angle < -90) {
             localUpdated = false;
-        } else if((abs(motor0Angle - prevMotor0Angle) > 45)) {
+        } else if((abs(motor0Angle - prevMotor0Angle) > 50)) {
             localUpdated = false;
         } else if(prevMotor0Angle == motor0Angle && prevMotor1Angle == motor1Angle) {
             localUpdated = false;
