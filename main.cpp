@@ -215,7 +215,7 @@ int main(int argc, char *argv[]) {
         radarZ = -radarInfo.posX;
         radarDataMutex.unlock();
 
-        motor0Angle = -atan2(radarZ , radarX) * 180.0 / M_PI;
+        motor0Angle = atan2(radarZ , radarX) * 180.0 / M_PI;
         motor1Angle = atan(radarY / sqrt(pow(radarX, 2) + pow(radarY, 2))) * 180.0 / M_PI;
          // cout << "Calculated pan of: " << motor0Angle << " and tilt: " << motor1Angle << endl;
 
