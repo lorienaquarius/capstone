@@ -203,8 +203,8 @@ int main(int argc, char *argv[]) {
 
     bool localUpdated = false;
 
-    thread turn1Thread(&motor::turnAbsoluteWrapper, &motor1, &turnAngle1);
-    thread turn0Thread(&motor::turnAbsoluteWrapper, &motor0, &turnAngle0);
+    // thread turn1Thread(&motor::turnAbsoluteWrapper, &motor1, &turnAngle1);
+    // thread turn0Thread(&motor::turnAbsoluteWrapper, &motor0, &turnAngle0);
 
     while(1) {
 
@@ -238,8 +238,10 @@ int main(int argc, char *argv[]) {
         // Update the turning variables
         if(localUpdated) {
             cout << "Updating angle to pan: " << motor0Angle << " tilt: " << motor1Angle << endl;
-            turnAngle0 = motor0Angle;
-            turnAngle1 = motor1Angle;
+            // turnAngle0 = motor0Angle;
+            // turnAngle1 = motor1Angle;
+            motor0.turnAbsolute(motor0Angle);
+            motor1.turnAbsolute(motor1Angle);
         }
 
         // Update previous angles
