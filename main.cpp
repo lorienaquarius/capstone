@@ -62,6 +62,7 @@ void readData(radarData* data, mutex* radarMutex){
     char buffer_raw[128];
     while(true) {
         ssize_t bytesRead = read(fd,buffer_raw,sizeof(buffer_raw)-1);
+        cout << "Read data from pipe" << endl;
         if (bytesRead >0) {
             string buffer(buffer_raw);
             parseRadarData(buffer,  data, radarMutex);
