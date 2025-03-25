@@ -148,7 +148,7 @@ inline void motor::turn(double targetCount) {
 
     // Turn clockwise
     if(!direction) {
-        while(count < (targetCount)) {
+        while(count < (targetCount) && !(*dataUpdated)) {
             gpioTrigger(MOTOR_PULSE_PIN[motorNum], WORKING_PULSE_WIDTH, 0);
             usleep(WORKING_STEP_SPEED);
             curr_a = gpioRead(MOTOR_ENCODER_A_PIN[motorNum]);
@@ -163,7 +163,7 @@ inline void motor::turn(double targetCount) {
     }
     // Turn counterclockwise
     else {
-        while(count > (targetCount) && !dataUpdated) {
+        while(count > (targetCount) && !(*dataUpdated)) {
             gpioTrigger(MOTOR_PULSE_PIN[motorNum], WORKING_PULSE_WIDTH, 0);
             usleep(WORKING_STEP_SPEED);
             curr_a = gpioRead(MOTOR_ENCODER_A_PIN[motorNum]);
