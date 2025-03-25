@@ -187,10 +187,7 @@ void motor::turnAbsoluteWrapper(double* degrees) {
                 prev_b = curr_b;
             }
         }
-        cout << "Turn complete!" << endl;
     }
-
-
 }
 
 

@@ -215,8 +215,8 @@ int main(int argc, char *argv[]) {
         radarZ = -radarInfo.posX;
         radarDataMutex.unlock();
 
-        motor0Angle = -atan2(radarZ , radarX) * 180 / M_PI;
-        motor1Angle = atan(radarY / sqrt(pow(radarX, 2) + pow(radarY, 2))) * 180 / M_PI;
+        motor0Angle = -atan2(radarZ , radarX) * 180.0 / M_PI;
+        motor1Angle = atan(radarY / sqrt(pow(radarX, 2) + pow(radarY, 2))) * 180.0 / M_PI;
         cout << "Turning to pan: " << motor0Angle << "tilt: " << motor1Angle << endl;
 
         // Denoising conditions. Only update the angle to turn to if it's a real update
@@ -234,6 +234,7 @@ int main(int argc, char *argv[]) {
 
         // Update the turning variables
         if(localUpdated) {
+            cout << "Updating angle" << endl;
             turnAngle0 = motor0Angle;
             turnAngle1 = motor1Angle;
         }
