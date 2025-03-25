@@ -231,16 +231,19 @@ int main(int argc, char *argv[]) {
 
         dataUpdated = localUpdated;
 
-        if(localUpdated) {
-            turn0Thread.join();
-            turn1Thread.join();
-            dataUpdated = false;
-        } else {
-            continue;
-        }
+        // if(localUpdated) {
+        //     turn0Thread.join();
+        //     turn1Thread.join();
+        //     dataUpdated = false;
+        // } else {
+        //     continue;
+        // }
         // Get Axes turning at the same time
         prevMotor0Angle = motor0Angle;
         prevMotor1Angle = motor1Angle;
+
+        turn0Thread.join();
+        turn1Thread.join();
 
     }
 
