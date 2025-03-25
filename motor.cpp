@@ -133,6 +133,9 @@ void motor::reset() {
 
     }
 }
+
+
+
 /// Helper function to turn the motor to a generic encoder count
 /// @param targetCount the target step count
 inline void motor::turn(double targetCount) {

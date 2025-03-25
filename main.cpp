@@ -202,11 +202,10 @@ int main(int argc, char *argv[]) {
 
     bool localUpdated = false;
 
-    // Get Axes turning at the same time
-    thread turn1Thread(&motor::turnAbsolute, &motor1, motor1Angle);
-    thread turn0Thread(&motor::turnAbsolute, &motor0, motor0Angle);
 
     while(1) {
+        thread turn1Thread(&motor::turnAbsolute, &motor1, motor1Angle);
+        thread turn0Thread(&motor::turnAbsolute, &motor0, motor0Angle);
         radarDataMutex.lock();
         // There is an axis transformation from the radar to the camera, which is why the coordinates are a bit shuffled
         radarX = radarInfo.posZ + 0.347; // Measured offsets from the radar to the camera
