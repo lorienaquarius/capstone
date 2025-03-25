@@ -119,7 +119,7 @@ int main(int argc, char *argv[]) {
         cout << "Failed to initialize GPIO" << endl;
         exit(1);
     }
-    atomic<bool> dataUpdated;
+    atomic<bool> dataUpdated(false);
     radarData radarInfo;
     mutex radarDataMutex;
     mutex dataUpdatedMutex;
