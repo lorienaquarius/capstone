@@ -19,11 +19,8 @@ void encoderZInterrupt(int gpio, int level, uint32_t tick) {
     }
 }
 
-motor::motor(const int motorNum, mutex* dataUpdatedMutex, atomic<bool>* dataUpdated) {
+motor::motor(const int motorNum) {
     this->motorNum = motorNum;
-    this->dataUpdatedMutex = dataUpdatedMutex;
-    this->dataUpdated = dataUpdated;
-
     int result = 0;
     count = 0;
 
@@ -134,6 +131,67 @@ void motor::reset() {
     }
 }
 
+void motor::turnAbsoluteWrapper(double* degrees) {
+    while(1) {
+        //cout << "Motor turning " << (direction ? "counterclockwise" : "clockwise") << endl;
+        //cout << "Current count: " << count << "\nTarget count: " << targetCount << endl;
+        double targetCount = (*degrees * STEPS_PER_REVOLUTION/DEGREES_PER_REVOLUTION * GEAR_RATIO); // To work with encoders better, take 2 steps at a time
+
+        // Turn clockwise
+        if(!direction) {
+            while(count < targetCount) {
+
+                targetCount = (*degrees * STEPS_PER_REVOLUTION/DEGREES_PER_REVOLUTION * GEAR_RATIO); // To work with encoders better, take 2 steps at a time
+
+                if (!direction != (count < targetCount)) {
+                    direction = !direction;
+                    gpioWrite(MOTOR_DIRECTION_PIN[motorNum], direction);
+                    usleep(6);
+                    break;
+                }
+
+                gpioTrigger(MOTOR_PULSE_PIN[motorNum], WORKING_PULSE_WIDTH, 0);
+                usleep(WORKING_STEP_SPEED);
+                curr_a = gpioRead(MOTOR_ENCODER_A_PIN[motorNum]);
+                curr_b = gpioRead(MOTOR_ENCODER_B_PIN[motorNum]);
+
+                if(curr_a != prev_a || curr_b != prev_b) {
+                    count++;
+                }
+                prev_a = curr_a;
+                prev_b = curr_b;
+            }
+        }
+        // Turn counterclockwise
+        else {
+            while(count > targetCount) {
+
+                targetCount = (*degrees * STEPS_PER_REVOLUTION/DEGREES_PER_REVOLUTION * GEAR_RATIO); // To work with encoders better, take 2 steps at a time
+
+                if (!direction != (count < targetCount)) {
+                    direction = !direction;
+                    gpioWrite(MOTOR_DIRECTION_PIN[motorNum], direction);
+                    usleep(6);
+                    break;
+                }
+
+                gpioTrigger(MOTOR_PULSE_PIN[motorNum], WORKING_PULSE_WIDTH, 0);
+                usleep(WORKING_STEP_SPEED);
+                curr_a = gpioRead(MOTOR_ENCODER_A_PIN[motorNum]);
+                curr_b = gpioRead(MOTOR_ENCODER_B_PIN[motorNum]);
+
+                if(curr_a != prev_a || curr_b != prev_b) {
+                    count--;
+                }
+                prev_a = curr_a;
+                prev_b = curr_b;
+            }
+        }
+        cout << "Turn complete!" << endl;
+    }
+
+
+}
 
 
 /// Helper function to turn the motor to a generic encoder count
@@ -151,7 +209,7 @@ inline void motor::turn(double targetCount) {
 
     // Turn clockwise
     if(!direction) {
-        while(count < (targetCount) && !(*dataUpdated)) {
+        while(count < targetCount) {
             gpioTrigger(MOTOR_PULSE_PIN[motorNum], WORKING_PULSE_WIDTH, 0);
             usleep(WORKING_STEP_SPEED);
             curr_a = gpioRead(MOTOR_ENCODER_A_PIN[motorNum]);
@@ -166,7 +224,7 @@ inline void motor::turn(double targetCount) {
     }
     // Turn counterclockwise
     else {
-        while(count > (targetCount) && !(*dataUpdated)) {
+        while(count > targetCount) {
             gpioTrigger(MOTOR_PULSE_PIN[motorNum], WORKING_PULSE_WIDTH, 0);
             usleep(WORKING_STEP_SPEED);
             curr_a = gpioRead(MOTOR_ENCODER_A_PIN[motorNum]);

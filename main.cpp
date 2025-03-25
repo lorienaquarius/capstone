@@ -119,14 +119,12 @@ int main(int argc, char *argv[]) {
         cout << "Failed to initialize GPIO" << endl;
         exit(1);
     }
-    atomic<bool> dataUpdated(false);
     radarData radarInfo;
     mutex radarDataMutex;
-    mutex dataUpdatedMutex;
 
     string degrees;
-    motor motor0(0, &dataUpdatedMutex, &dataUpdated);
-    motor motor1(1, &dataUpdatedMutex, &dataUpdated);
+    motor motor0(0);
+    motor motor1(1);
 
 
 
@@ -196,16 +194,20 @@ int main(int argc, char *argv[]) {
     double prevMotor0Angle = 0;
     double prevMotor1Angle = 0;
 
+    double turnAngle0 = 0;
+    double turnAngle1 = 0;
+
     double radarX = 0;
     double radarY = 0;
     double radarZ = 0;
 
     bool localUpdated = false;
 
+    thread turn1Thread(&motor::turnAbsoluteWrapper, &motor1, &turnAngle1);
+    thread turn0Thread(&motor::turnAbsoluteWrapper, &motor0, &turnAngle0);
 
     while(1) {
-        thread turn1Thread(&motor::turnAbsolute, &motor1, motor1Angle);
-        thread turn0Thread(&motor::turnAbsolute, &motor0, motor0Angle);
+
         radarDataMutex.lock();
         // There is an axis transformation from the radar to the camera, which is why the coordinates are a bit shuffled
         radarX = radarInfo.posZ + 0.347; // Measured offsets from the radar to the camera
@@ -217,6 +219,7 @@ int main(int argc, char *argv[]) {
         motor1Angle = atan(radarY / sqrt(pow(radarX, 2) + pow(radarY, 2))) * 180 / M_PI;
         cout << "Turning to pan: " << motor0Angle << "tilt: " << motor1Angle << endl;
 
+        // Denoising conditions. Only update the angle to turn to if it's a real update
         if(radarX <= 0) {
             localUpdated = false;
         } else if(motor0Angle > 50 || motor0Angle < -50) {
@@ -229,21 +232,15 @@ int main(int argc, char *argv[]) {
             localUpdated = true;
         }
 
-        dataUpdated = localUpdated;
+        // Update the turning variables
+        if(localUpdated) {
+            turnAngle0 = motor0Angle;
+            turnAngle1 = motor1Angle;
+        }
 
-        // if(localUpdated) {
-        //     turn0Thread.join();
-        //     turn1Thread.join();
-        //     dataUpdated = false;
-        // } else {
-        //     continue;
-        // }
-        // Get Axes turning at the same time
+        // Update previous angles
         prevMotor0Angle = motor0Angle;
         prevMotor1Angle = motor1Angle;
-
-        turn0Thread.join();
-        turn1Thread.join();
 
     }
 

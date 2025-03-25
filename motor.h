@@ -22,20 +22,18 @@ class motor {
 
 public:
 
-    explicit motor(int motorNum, std::mutex* dataUpdateMutex, std::atomic<bool>* dataUpdated);
+    explicit motor(int motorNum);
     ~motor();
     void turnRelative(double degrees);
     void turnAbsolute(double degrees);
     void calibrate();
 
-
+    void turnAbsoluteWrapper(double* degrees);
     void reset();
     void turnOnce();
     void readEncoders();
 
 private:
-    std::mutex* dataUpdatedMutex;
-    std::atomic<bool>* dataUpdated;
     void turn(double targetCount);
     int count = 0;
     bool direction = false;
