@@ -213,7 +213,7 @@ int main(int argc, char *argv[]) {
         radarZ = -radarInfo.posX;
         radarDataMutex.unlock();
 
-        motor0Angle = atan2(radarZ , radarX) * 180 / M_PI;
+        motor0Angle = -atan2(radarZ , radarX) * 180 / M_PI;
         motor1Angle = atan(radarY / sqrt(pow(radarX, 2) + pow(radarY, 2))) * 180 / M_PI;
         cout << "Turning to pan: " << motor0Angle << "tilt: " << motor1Angle << endl;
 
@@ -234,13 +234,11 @@ int main(int argc, char *argv[]) {
         if(localUpdated) {
             turn0Thread.join();
             turn1Thread.join();
-            thread turn1Thread(&motor::turnAbsolute, &motor1, motor1Angle);
-            thread turn0Thread(&motor::turnAbsolute, &motor0, motor0Angle);
             dataUpdated = false;
+        } else {
+            continue;
         }
         // Get Axes turning at the same time
-
-
         prevMotor0Angle = motor0Angle;
         prevMotor1Angle = motor1Angle;
 
