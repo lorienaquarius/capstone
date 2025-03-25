@@ -226,7 +226,7 @@ int main(int argc, char *argv[]) {
         } else if(motor0Angle > 90 || motor0Angle < -90) {
             localUpdated = false;
             cout << "Detected too large of an angle" << endl;
-        } else if((abs(motor0Angle - prevMotor0Angle) > 50)) {
+        } else if((abs(motor0Angle - prevMotor0Angle) > 20)) {
             localUpdated = false;
             cout << "Change in angle was too great, ignoring" << endl;
         } else if(prevMotor0Angle == motor0Angle && prevMotor1Angle == motor1Angle) {
