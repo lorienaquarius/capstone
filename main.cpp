@@ -234,7 +234,7 @@ int main(int argc, char *argv[]) {
 
         // Update the turning variables
         if(localUpdated) {
-            cout << "Updating angle" << endl;
+            cout << "Updating angle to pan: " << motor0Angle << " tilt: " << motor1Angle << endl;
             turnAngle0 = motor0Angle;
             turnAngle1 = motor1Angle;
         }
