@@ -217,7 +217,7 @@ int main(int argc, char *argv[]) {
 
         motor0Angle = -atan2(radarZ , radarX) * 180.0 / M_PI;
         motor1Angle = atan(radarY / sqrt(pow(radarX, 2) + pow(radarY, 2))) * 180.0 / M_PI;
-        cout << "Turning to pan: " << motor0Angle << "tilt: " << motor1Angle << endl;
+        // cout << "Turning to pan: " << motor0Angle << "tilt: " << motor1Angle << endl;
 
         // Denoising conditions. Only update the angle to turn to if it's a real update
         if(radarX <= 0) {
