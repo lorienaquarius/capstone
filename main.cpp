@@ -10,6 +10,7 @@
 #include <unistd.h>
 #include <vector>
 #include <sys/stat.h>
+#include <csignal>
 
 #include "motor.h"
 #include "radar.h"
@@ -18,6 +19,7 @@
 
 using namespace std;
 
+int interruptFlag;
 ///
 /// @param dataString The string containing the data to be parsed
 /// @param data the radarData object to put data into
@@ -76,9 +78,8 @@ void readData(radarData* data, mutex* radarMutex){
     // cout << "Acceleration Data: X: " << data.accX << " Y: " << data.accY << " Z: " << data.accZ << endl;
 }
 
-void (*exitRoutine(motor *motor0, motor *motor1))() {
-    motor0->reset();
-    motor1->reset();
+void interruptHandler(int signum) {
+    interruptFlag = 1;
 }
 
 void printMenu() {
@@ -129,8 +130,7 @@ int main(int argc, char *argv[]) {
     motor motor0(0);
     motor motor1(1);
 
-    set_terminate(exitRoutine(&motor0, &motor1));
-
+    signal(SIGINT, interruptHandler);
     string input;
     do {
         printMenu();
@@ -209,7 +209,7 @@ int main(int argc, char *argv[]) {
     // thread turn1Thread(&motor::turnAbsoluteWrapper, &motor1, &turnAngle1);
     // thread turn0Thread(&motor::turnAbsoluteWrapper, &motor0, &turnAngle0);
 
-    while(1) {
+    while(1 && !interruptFlag) {
 
         radarDataMutex.lock();
         // There is an axis transformation from the radar to the camera, which is why the coordinates are a bit shuffled
@@ -256,5 +256,7 @@ int main(int argc, char *argv[]) {
         usleep(1000);
 
     }
+    motor0.reset();
+    motor1.reset();
 
 }
