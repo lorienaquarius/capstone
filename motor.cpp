@@ -204,7 +204,7 @@ inline void motor::turn(double targetCount) {
     //cout << "Motor turning " << (direction ? "counterclockwise" : "clockwise") << endl;
     //cout << "Current count: " << count << "\nTarget count: " << targetCount << endl;
 
-    int turnSpeed = MIN((STEPS_PER_REVOLUTION * GEAR_RATIO / 20) / abs(count - targetCount) * WORKING_STEP_SPEED, WORKING_STEP_SPEED);
+    int turnSpeed = MIN((STEPS_PER_REVOLUTION * GEAR_RATIO / 15) / abs(count - targetCount) * WORKING_STEP_SPEED, WORKING_STEP_SPEED);
 
     // Turn clockwise
     if(!direction) {
