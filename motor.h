@@ -13,6 +13,7 @@
 #define MAX_STEP_SPEED 8
 #define WORKING_STEP_SPEED 250 // delay between steps in microseconds, while normal spinning
 #define WORKING_ENCODER_STEP_SPEED 1000 // Delay between steps in microseconds, while tryiing to use an encoder
+#define MIN(x,y) (x<y)?(x):(y)
 #include <atomic>
 #include <mutex>
 #include <pigpio.h>
