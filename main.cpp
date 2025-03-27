@@ -76,7 +76,10 @@ void readData(radarData* data, mutex* radarMutex){
     // cout << "Acceleration Data: X: " << data.accX << " Y: " << data.accY << " Z: " << data.accZ << endl;
 }
 
-
+void (*exitRoutine(motor *motor0, motor *motor1))() {
+    motor0->reset();
+    motor1->reset();
+}
 
 void printMenu() {
     cout << "Main menu" << endl;
@@ -126,7 +129,7 @@ int main(int argc, char *argv[]) {
     motor motor0(0);
     motor motor1(1);
 
-
+    set_terminate(exitRoutine(&motor0, &motor1));
 
     string input;
     do {
