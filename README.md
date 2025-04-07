@@ -5,6 +5,7 @@ This project was setup using CLion, which uses cmake. Project is run using
 1. `$cmake .`
 2. `$make`
 3. `$sudo ./capstone`
+
 Also, it is common to need to run `$sudo killall pigpiod` when the raspberry pi is first started, in order for the motor process to control the gpio 
 ## Organization
 This code is organized under 3 main files: main.cpp, motor.cpp, and motor.h
