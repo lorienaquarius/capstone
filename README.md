@@ -1,4 +1,4 @@
-# SYSC4907 Group 8: Detection of Unlawful Drones, September 2024 - April 2025 By Lorien Aquarius, Liam Burns, Amin Zeina, and Aniesh Sabnani 
+# SYSC4907 Group 8: Detection of Unlawful Drones \September 2024 - April 2025 \By Lorien Aquarius, Liam Burns, Amin Zeina, and Aniesh Sabnani 
 
 ## Setup and Running
 This project was setup using CLion, which uses cmake. Project is run using
