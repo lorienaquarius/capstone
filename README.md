@@ -18,5 +18,5 @@ Calibration should be done such that the camera is parallel to the ground, and i
 point slightly downwards to look at the radar
 
 ## Synchronization with the radar program
-the radar python wrapper should be run after the motor program, or else the python wrapper will not be able to open the pipe properly
+the radar python wrapper should be run after the motor program, or else the python wrapper will not be able to open the pipe properly. \
 see [here](https://github.com/burnsy2830/ProjectStarshotRadarWrapper) for the python wrapper to grab data from the radar
